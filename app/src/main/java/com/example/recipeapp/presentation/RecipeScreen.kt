@@ -1,14 +1,19 @@
 package com.example.recipeapp.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,24 +26,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.recipeapp.presentation.components.IngredientsList
 import com.example.recipeapp.presentation.components.Instructions
 import com.example.recipeapp.presentation.components.ThumbNail
+import com.example.recipeapp.presentation.components.navdrawer.components.NavigationDrawer
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.response.RetrofitInstance
-import com.example.recipeapp.ui.theme.Black40
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.isActive
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import retrofit2.HttpException
-
+@RootNavGraph(start = true)
+@Destination
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeList() {
+fun RecipeScreen() {
     var recipes by rememberSaveable { mutableStateOf<List<Meal>>(emptyList()) }
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var isError by rememberSaveable { mutableStateOf(false) }
@@ -94,31 +101,29 @@ fun RecipeList() {
     ) {
         Column {
             if (isLoading) {
+                Thread.sleep(3000)
                 // Display loading indicator
                 Column (modifier = Modifier
-                    .background(Black40)
+                    .background(MaterialTheme.colorScheme.surface)
                     .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center) {
                     Text(
                         text = "Loading Recipes...",
                         fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
+                        fontSize = 30.sp,
+                        color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.size(40.dp))
                     CircularProgressIndicator(modifier = Modifier.size(40.dp), strokeWidth = 5.dp)
-                    coroutineScope.cancel()
                 }
             } else if (isError) {
                 // Display error message
-                Text(text = "Error fetching data", color = Color.Red)
-            } else {
-                // Display the list of recipes
-                LazyColumn {
-                    items(recipes) { recipe ->
-                        RecipeItem(recipe)
-                    }
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                    Text(text = "Error Fetching Data", color = Color.Red, fontSize = 60.sp)
                 }
+            } else {
+                NavigationDrawer(recipes)
             }
         }
     }
@@ -126,18 +131,10 @@ fun RecipeList() {
 
 @Composable
 fun RecipeItem(recipe: Meal) {
-    // Compose UI for displaying a single recipe item
-    val context = LocalContext.current
-    ThumbNail(recipe)
-    Instructions(recipe)
-    // Add more UI components based on your Recipe data model
+    ThumbNail(recipe = recipe)
+    Instructions(recipe= recipe)
+    IngredientsList(recipe = recipe)// Add more UI components based on your Recipe data model
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewRecipeList() {
-    RecipeList()
-}
 
 

@@ -2,7 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("kotlin-parcelize")
-    id("com.google.devtools.ksp") version "1.6.10-1.0.2"
+    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
 }
 
 kotlin {
@@ -43,11 +43,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -59,6 +59,11 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    applicationVariants.all {
+        addJavaSourceFoldersToModel(
+            File(buildDir, "generated/ksp/$name/kotlin")
+        )
     }
 }
 
@@ -88,8 +93,8 @@ dependencies {
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.27.0")
     //Compose Destinations
-    implementation("io.github.raamcosta.compose-destinations:core:1.1.2-beta")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.1.2-beta")
+    implementation("io.github.raamcosta.compose-destinations:core:1.9.55")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.9.55")
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,7 +38,7 @@ fun Instructions(recipe: Meal) {
     ) {
         Column (modifier = Modifier
             .background(
-                brush = Brush.linearGradient(colors = listOf(BlackA40, WhiteA40)),
+                brush = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.inverseOnSurface, MaterialTheme.colorScheme.surface)),
                 shape = RoundedCornerShape(10.dp)
             )
             .padding(PaddingValues(25.dp, 30.dp))
@@ -47,16 +48,15 @@ fun Instructions(recipe: Meal) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
                 fontFamily = FontFamily.SansSerif,
-                color = BlackA60)
-            Divider(thickness = 3.dp, color = BlackA60, modifier = Modifier.padding(0.dp, 15.dp))
+                color = MaterialTheme.colorScheme.secondary)
+            Divider(thickness = 3.dp, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(0.dp, 15.dp))
             Text(
                 text = recipe.strInstructions,
                 fontStyle = FontStyle.Italic,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
                 fontFamily = FontFamily.SansSerif,
-                color = BlackA60
-            )
+                color = MaterialTheme.colorScheme.secondary)
         }
     }
 }

@@ -55,7 +55,7 @@ fun ThumbNail(recipe: Meal) {
                 painter = painterResource(id = background),
                 contentScale = ContentScale.Crop,
             )
-            .padding(PaddingValues(15.dp, 15.dp, 15.dp, 30.dp)),
+            .padding(PaddingValues(15.dp, 85.dp, 15.dp, 30.dp)),
         contentAlignment = Alignment.TopCenter
     ){
         val context = LocalContext.current
@@ -67,7 +67,7 @@ fun ThumbNail(recipe: Meal) {
                     brush = Brush.linearGradient(colors = listOf(Black40, BlackA60)),
                     shape = RoundedCornerShape(10.dp)
                 )
-                .padding(PaddingValues(20.dp, 10.dp, 10.dp, 20.dp))
+                .padding(PaddingValues(20.dp, 20.dp, 10.dp, 20.dp))
                 .fillMaxWidth()
         ){
             Text(text = "Recipe of the Day",

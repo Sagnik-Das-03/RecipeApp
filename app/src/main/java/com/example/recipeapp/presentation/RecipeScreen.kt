@@ -39,13 +39,14 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import retrofit2.HttpException
 @RootNavGraph(start = true)
 @Destination
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeScreen() {
+fun RecipeScreen(navigator: DestinationsNavigator) {
     var recipes by rememberSaveable { mutableStateOf<List<Meal>>(emptyList()) }
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var isError by rememberSaveable { mutableStateOf(false) }
@@ -101,7 +102,6 @@ fun RecipeScreen() {
     ) {
         Column {
             if (isLoading) {
-                Thread.sleep(3000)
                 // Display loading indicator
                 Column (modifier = Modifier
                     .background(MaterialTheme.colorScheme.surface)
@@ -115,7 +115,9 @@ fun RecipeScreen() {
                         color = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.size(40.dp))
-                    CircularProgressIndicator(modifier = Modifier.size(40.dp), strokeWidth = 5.dp)
+                    CircularProgressIndicator(modifier = Modifier.size(40.dp),
+                        strokeWidth = 5.dp,
+                        color = MaterialTheme.colorScheme.primary)
                 }
             } else if (isError) {
                 // Display error message
@@ -123,7 +125,7 @@ fun RecipeScreen() {
                     Text(text = "Error Fetching Data", color = Color.Red, fontSize = 60.sp)
                 }
             } else {
-                NavigationDrawer(recipes)
+                NavigationDrawer(recipes, navigator)
             }
         }
     }

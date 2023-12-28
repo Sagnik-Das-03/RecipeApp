@@ -31,14 +31,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.recipeapp.presentation.RecipeItem
+import com.example.recipeapp.presentation.destinations.SearchRecipeLetterScreenDestination
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.util.items
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
-
+@Destination
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationDrawer(recipes: List<Meal>) {
+fun NavigationDrawer(recipes: List<Meal>, navigator: DestinationsNavigator) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItemIndex by rememberSaveable {
@@ -50,13 +53,18 @@ fun NavigationDrawer(recipes: List<Meal>) {
                 items.forEachIndexed { index, navigationItem ->
                     NavigationDrawerItem(
                         label = {
-                            Text(text = navigationItem.title)
+                            Text(text = navigationItem.title, style = MaterialTheme.typography.titleMedium)
                         },
                         selected = index == selectedItemIndex,
                         onClick = {
                             selectedItemIndex = index
                             scope.launch {
                                 drawerState.close()
+                                if(selectedItemIndex == 0){
+                                    navigator.navigate(
+                                        SearchRecipeLetterScreenDestination
+                                    )
+                                }
                             }
                         },
                         icon = {
@@ -67,13 +75,8 @@ fun NavigationDrawer(recipes: List<Meal>) {
                                 contentDescription = navigationItem.title
                             )
                         },
-                        badge = {
-                            navigationItem?.let {
-                                Text(text = navigationItem.badgeCount.toString())
-                            }
-                        },
                         modifier = Modifier
-                            .padding(vertical = 5.dp, horizontal = 10.dp)
+                            .padding(top = 15.dp, start = 20.dp, end = 20.dp)
                             .clip(RoundedCornerShape(10.dp))
                     )
                 }
@@ -85,7 +88,10 @@ fun NavigationDrawer(recipes: List<Meal>) {
         Scaffold(
             topBar = {
                 TopAppBar(title = {
-                    Text(text = "Recipe App", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.ExtraBold)
+                    Text(text = "Recipe App",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.ExtraBold)
                 },
                     navigationIcon = {
                         IconButton(onClick = {
@@ -94,10 +100,12 @@ fun NavigationDrawer(recipes: List<Meal>) {
                             }
                         }
                         ) {
-                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu", tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                            Icon(imageVector = Icons.Default.Menu,
+                                contentDescription = "Menu",
+                                tint = MaterialTheme.colorScheme.primary)
                         }
                     },
-                    colors = TopAppBarDefaults.smallTopAppBarColors(MaterialTheme.colorScheme.tertiaryContainer)
+                    colors = TopAppBarDefaults.smallTopAppBarColors(MaterialTheme.colorScheme.primaryContainer)
                 )
             }
         ) {

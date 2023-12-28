@@ -51,12 +51,11 @@ fun IngredientsList(ingredient: Any, measure: Any){
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
-        val url = "https://www.themealdb.com/images/ingredients/${ingredient}.png"
-        println(url)
+        val url = "https://www.themealdb.com/images/ingredients/${ingredient}-small.png"
         AsyncImage(model = url, contentDescription = "Ingredient Image", modifier = Modifier
             .size(50.dp)
             .padding(10.dp))
-        Spacer(modifier = Modifier.width(8.dp)) // Adjust the spacing as needed
+        // Adjust the spacing as needed
         Text(
             text = ingredient.toString(),
             fontSize = 16.sp,
@@ -64,13 +63,12 @@ fun IngredientsList(ingredient: Any, measure: Any){
             color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.padding(10.dp, 10.dp)
         )
-        Spacer(modifier = Modifier.width(8.dp)) // Adjust the spacing as needed
         Text(
             text = measure.toString(),
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.secondary,
-            modifier = Modifier.padding(10.dp, 10.dp),
+            modifier = Modifier.padding(10.dp, 10.dp).weight(1f),
             textAlign = TextAlign.Center,
         )
     }

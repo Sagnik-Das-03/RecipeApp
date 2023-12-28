@@ -31,7 +31,6 @@ val items = listOf(
         title = "Search by Name",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
-        badgeCount = 45
     ),
     NavigationItem(
         title = "All Meal Categories",

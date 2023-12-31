@@ -12,32 +12,30 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,13 +44,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.recipeapp.presentation.components.ThumbNail
+import com.example.recipeapp.presentation.components.ThumbNailList
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.response.RetrofitInstance
 import com.ramcosta.composedestinations.annotation.Destination
@@ -61,6 +58,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -102,11 +100,18 @@ fun SearchRecipeLetterScreen(navigator: DestinationsNavigator) {
                                         recipes = response.body()?.meals ?: emptyList()
                                         Log.d("API", "API called at : $dateTime")
                                         Log.d("MealList", "Number of recipes: ${recipes.size}")
+                                        isLoading = false
                                     } else {
                                         isError = true
                                         Log.e("MealList", "API call unsuccessful at : $dateTime")
                                     }
                                 } catch (e: HttpException) {
+                                    isError = true
+                                    Log.e(
+                                        "MealList",
+                                        "API call failed with exception: ${e.message}"
+                                    )
+                                }catch (e: SocketTimeoutException) {
                                     isError = true
                                     Log.e(
                                         "MealList",
@@ -120,6 +125,7 @@ fun SearchRecipeLetterScreen(navigator: DestinationsNavigator) {
                                 // If query is empty, trigger a refresh
                                 recipes = emptyList()
                                 isLoading = false
+                                isError = true
                             }
                         }
                     }
@@ -161,27 +167,17 @@ fun SearchRecipeLetterScreen(navigator: DestinationsNavigator) {
                     modifier = Modifier.padding(15.dp, 5.dp))
             }
             // Show LazyRow when not loading
-            LazyColumn(contentPadding = PaddingValues(top = 120.dp)) {
+            LazyRow(contentPadding = PaddingValues(top = 120.dp)) {
                 items(items = recipes) { meal ->
                     Spacer(modifier = Modifier
-                        .fillMaxWidth()
-                        .size(10.dp)
-                        .background(
-                            MaterialTheme.colorScheme.secondary,
-                            shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
-                        ))
-                    RecipeItem(recipe = meal)
-                    Spacer(modifier = Modifier
-                        .fillMaxWidth()
-                        .size(10.dp)
-                        .background(
-                            MaterialTheme.colorScheme.secondary,
-                            shape = RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
-                        ))
+                        .background(Color.Transparent)
+                        .fillMaxHeight()
+                        .size(5.dp))
+                    ThumbNailList(recipe = meal, navigator= navigator)
                     Spacer(modifier = Modifier
                         .background(Color.Transparent)
-                        .fillMaxWidth(1f)
-                        .height(10.dp))
+                        .fillMaxHeight()
+                        .size(5.dp))
                 }
             }
         }
@@ -208,24 +204,18 @@ fun SearchBar(onSearchQueryChanged: (String) -> Unit) {
         },
         placeholder = {
             Row (modifier = Modifier.padding(0.dp, 3.dp, 10.dp, 3.dp)){
-                Text("Search for meals by first letter" , color = MaterialTheme.colorScheme.primary)
+                Text("Enter a Letter", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
             }
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(top = 10.dp, bottom = 10.dp, start = 18.dp, end = 18.dp)
             .background(
-                brush = Brush.horizontalGradient(
-                    colors = listOf(
-                        MaterialTheme.colorScheme.inversePrimary,
-                        MaterialTheme.colorScheme.primaryContainer
-                    )
-                ),
-                shape = RoundedCornerShape(50),
-                alpha = 0.7f
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(50)
             )
             .border(
-                color = MaterialTheme.colorScheme.onSecondary,
+                color = MaterialTheme.colorScheme.secondary,
                 width = 2.dp,
                 shape = RoundedCornerShape(50)
             ),
@@ -239,11 +229,6 @@ fun SearchBar(onSearchQueryChanged: (String) -> Unit) {
             }
         ),
         singleLine = true,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = MaterialTheme.colorScheme.secondary,
-            unfocusedBorderColor = MaterialTheme.colorScheme.onSecondary,
-            focusedBorderColor = MaterialTheme.colorScheme.onSecondary
-        ),
         shape = RoundedCornerShape(50),
         textStyle = MaterialTheme.typography.titleLarge
     )
@@ -253,6 +238,16 @@ fun SearchBar(onSearchQueryChanged: (String) -> Unit) {
 @Composable
 fun ErrorDialog() {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Enter Valid Input", fontSize = 60.sp, color = Color.Red)
+        Text(text = "Enter Valid Input",
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onErrorContainer,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .padding(start = 40.dp, end = 40.dp, top = 30.dp, bottom = 30.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.errorContainer,
+                    shape = RoundedCornerShape(10.dp)
+                ))
     }
 }

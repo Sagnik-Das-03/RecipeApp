@@ -18,7 +18,7 @@ val backgrounds = mutableListOf<Int>(
     R.drawable.food5,
     R.drawable.food6,
     R.drawable.food7, R.drawable.food8, R.drawable.food9,
-    R.drawable.food10, R.drawable.food11, R.drawable.food12)
+    R.drawable.food10, R.drawable.food11, R.drawable.food12,  R.drawable.food13)
 
 
 val items = listOf(
@@ -38,3 +38,4 @@ val items = listOf(
         unselectedIcon = Icons.Outlined.Search,
     ),
 )
+

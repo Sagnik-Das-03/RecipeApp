@@ -41,10 +41,11 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import retrofit2.HttpException
+import java.net.SocketTimeoutException
+
 @RootNavGraph(start = true)
 @Destination
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipeScreen(navigator: DestinationsNavigator) {
     var recipes by rememberSaveable { mutableStateOf<List<Meal>>(emptyList()) }
@@ -63,6 +64,8 @@ fun RecipeScreen(navigator: DestinationsNavigator) {
                     isError = true
                 }
             } catch (e: HttpException) {
+                isError = true
+            }catch (e: SocketTimeoutException) {
                 isError = true
             } finally {
                 isLoading = false
@@ -133,7 +136,7 @@ fun RecipeScreen(navigator: DestinationsNavigator) {
 
 @Composable
 fun RecipeItem(recipe: Meal) {
-    ThumbNail(recipe = recipe)
+    ThumbNail(recipe = recipe, headline = "Recipe of the Day")
     Instructions(recipe= recipe)
     IngredientsList(recipe = recipe)// Add more UI components based on your Recipe data model
 }

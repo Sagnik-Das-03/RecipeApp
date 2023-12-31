@@ -46,7 +46,7 @@ import com.example.recipeapp.util.backgrounds
 import com.example.recipeapp.util.openCustomTab
 
 @Composable
-fun ThumbNail(recipe: Meal) {
+fun ThumbNail(recipe: Meal, headline: String) {
     val background = backgrounds.random()
     Box(
         modifier = Modifier
@@ -70,7 +70,7 @@ fun ThumbNail(recipe: Meal) {
                 .padding(PaddingValues(20.dp, 20.dp, 10.dp, 20.dp))
                 .fillMaxWidth()
         ){
-            Text(text = "Recipe of the Day",
+            Text(text = headline,
                 fontSize =45.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = WhiteA90,

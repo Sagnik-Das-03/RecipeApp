@@ -30,15 +30,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.recipeapp.presentation.RecipeItem
+import com.example.recipeapp.presentation.screen.RecipeItem
+import com.example.recipeapp.presentation.screen.destinations.SearchLetterDestination
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.util.items
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavigationDrawer(recipes: List<Meal>) {
+fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItemIndex by rememberSaveable {
@@ -56,7 +58,9 @@ fun NavigationDrawer(recipes: List<Meal>) {
                         onClick = {
                             selectedItemIndex = index
                             scope.launch {
-                                drawerState.close()
+                                if(selectedItemIndex == 0){
+                                    navigator.navigate(SearchLetterDestination)
+                                }
                             }
                         },
                         icon = {
@@ -66,11 +70,6 @@ fun NavigationDrawer(recipes: List<Meal>) {
                                 } else navigationItem.unselectedIcon,
                                 contentDescription = navigationItem.title
                             )
-                        },
-                        badge = {
-                            navigationItem?.let {
-                                Text(text = navigationItem.badgeCount.toString())
-                            }
                         },
                         modifier = Modifier
                             .padding(vertical = 5.dp, horizontal = 10.dp)

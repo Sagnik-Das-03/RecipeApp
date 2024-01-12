@@ -52,7 +52,6 @@ fun IngredientsList(ingredient: Any, measure: Any){
             )
     ) {
         val url = "https://www.themealdb.com/images/ingredients/${ingredient}.png"
-        println(url)
         AsyncImage(model = url, contentDescription = "Ingredient Image", modifier = Modifier
             .size(50.dp)
             .padding(10.dp))

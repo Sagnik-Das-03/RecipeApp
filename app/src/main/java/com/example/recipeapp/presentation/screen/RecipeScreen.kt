@@ -1,4 +1,4 @@
-package com.example.recipeapp.presentation
+package com.example.recipeapp.presentation.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -39,13 +39,14 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import retrofit2.HttpException
 @RootNavGraph(start = true)
 @Destination
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecipeScreen() {
+fun RecipeScreen(navigator: DestinationsNavigator) {
     var recipes by rememberSaveable { mutableStateOf<List<Meal>>(emptyList()) }
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var isError by rememberSaveable { mutableStateOf(false) }
@@ -123,7 +124,7 @@ fun RecipeScreen() {
                     Text(text = "Error Fetching Data", color = Color.Red, fontSize = 60.sp)
                 }
             } else {
-                NavigationDrawer(recipes)
+                NavigationDrawer(navigator= navigator, recipes = recipes)
             }
         }
     }

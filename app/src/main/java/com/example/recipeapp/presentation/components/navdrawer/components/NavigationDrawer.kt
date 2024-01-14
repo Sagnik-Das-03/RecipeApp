@@ -18,7 +18,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -84,7 +84,11 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
         Scaffold(
             topBar = {
                 TopAppBar(title = {
-                    Text(text = "Recipe App", style = MaterialTheme.typography.headlineMedium, color = MaterialTheme.colorScheme.onTertiaryContainer, fontWeight = FontWeight.ExtraBold)
+                    Text(
+                        text = "Recipe App",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onTertiaryContainer,
+                        fontWeight = FontWeight.ExtraBold)
                 },
                     navigationIcon = {
                         IconButton(onClick = {
@@ -95,8 +99,7 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                         ) {
                             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu", tint = MaterialTheme.colorScheme.onTertiaryContainer)
                         }
-                    },
-                    colors = TopAppBarDefaults.smallTopAppBarColors(MaterialTheme.colorScheme.tertiaryContainer)
+                    }
                 )
             }
         ) {

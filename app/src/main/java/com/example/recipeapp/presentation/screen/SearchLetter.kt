@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.recipeapp.presentation.components.ThumbNail
 import com.example.recipeapp.presentation.components.searchbar.SearchBar
 import com.example.recipeapp.presentation.components.thumnail.ThumbNailItem
 import com.example.recipeapp.presentation.screen.destinations.RecipeScreenDestination
@@ -62,6 +61,7 @@ fun SearchLetter(navigator: DestinationsNavigator) {
     var isError by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     var query by remember { mutableStateOf("") }
+    var errorMsg by remember { mutableStateOf("") }
     val dateTime = LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
     Scaffold(
         topBar = {
@@ -70,14 +70,40 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.padding(top = 16.dp, start = 18.dp, end = 8.dp, bottom = 10.dp)
             ) {
-                FilledTonalButton(
-                    onClick = { navigator.navigate(RecipeScreenDestination) }) {
-                    Icon(
-                        imageVector = Icons.Outlined.Home,
-                        contentDescription = "Back to Home",
-                        modifier = Modifier
-                            .size(18.dp)
-                    )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    FilledTonalButton(
+                        onClick = {
+                                coroutineScope.launch {
+                                    delay(500L)
+                                    navigator.navigate(RecipeScreenDestination)
+                                }
+                             }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Home,
+                            contentDescription = "Back to Home",
+                            modifier = Modifier
+                                .size(18.dp)
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(3.dp))
+                    if(query.isEmpty()){
+                        Text(text = "",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.secondary)
+                    }else if(query.isNotEmpty() && isError){
+                        Text(text = "Invalid Letter",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.error)
+                    }else{
+                        Text(
+                            text = "Results: ${recipes.size}",
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary)
+                    }
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 SearchBar(
@@ -85,7 +111,7 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                     onSearchQueryChanged = {
                         query = it
                         coroutineScope.launch {
-                            delay(500L)
+                            delay(250L)
                             if (
                                 query.length == 1
                                 && !query.matches("[0-9]+".toRegex())
@@ -100,14 +126,17 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                                         isLoading = false
                                     } else {
                                         isError = true
-                                        Log.e(TAG, "Error Calling API for query $query : $dateTime")
+                                        errorMsg = "Error Calling API for query $query : $dateTime"
+                                        Log.e(TAG, errorMsg)
                                     }
                                 } catch (e: HttpException) {
                                     isError = true
-                                    Log.e(TAG, "Exception:${e.message} \n time: $dateTime")
+                                    errorMsg = "Exception:${e.message} \n time: $dateTime"
+                                    Log.e(TAG, errorMsg)
                                 } catch (e: SocketTimeoutException) {
                                     isError = true
-                                    Log.e(TAG, "Exception:${e.message} \n time: $dateTime")
+                                    errorMsg = "Exception:${e.message} \n time: $dateTime"
+                                    Log.e(TAG, errorMsg)
                                 } finally {
                                     isLoading = false
                                 }
@@ -115,14 +144,23 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                             } else if (
                                 query.matches("[0-9]+".toRegex()) || query.matches("[^a-zA-Z0-9 ]".toRegex())
                             ) {
+                                isLoading = false
                                 isError = true
+                                errorMsg = "Search Query: $query is not a Letter"
                                 Log.e(TAG, "Error Calling API for query $query : $dateTime")
                             } else if (
                                 query.isBlank()
                             ) {
                                 isLoading = true
-                                Log.e(TAG, "Error Calling API for query $query : $dateTime")
-                            }else {
+                                Log.e(TAG, "Error Calling API for empty query $query : $dateTime")
+                            }else if (
+                                query.length>1
+                            ) {
+                                isError = true
+                                isLoading = false
+                                errorMsg = "Search Query must be a Single Letter"
+                                Log.e(TAG, "Error Calling API for empty query $query : $dateTime")
+                            } else {
                                 isError = false
                             }
                         }
@@ -131,7 +169,7 @@ fun SearchLetter(navigator: DestinationsNavigator) {
             }
         }
     ) {
-        if (isLoading && query.isBlank()) {
+        if (isLoading || query.isBlank()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -149,15 +187,15 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                     )
                 }
             }
-        } else if (isError) {
+        } else if (isError && query.isNotEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "Some Unknown Error Occurred",
-                    style = MaterialTheme.typography.titleSmall,
+                    text = errorMsg,
+                    style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.error
                 )
             }

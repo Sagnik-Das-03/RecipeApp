@@ -1,6 +1,10 @@
 package com.example.recipeapp.presentation.components.navdrawer.components
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,7 +22,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,10 +34,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.recipeapp.presentation.screen.RecipeItem
+import com.example.recipeapp.presentation.screen.destinations.RecipeScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.SearchLetterDestination
 import com.example.recipeapp.remote.Meal
-import com.example.recipeapp.util.items
+import com.example.recipeapp.util.navItems
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -49,7 +54,15 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet {
-                items.forEachIndexed { index, navigationItem ->
+                Box(modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth()
+                    .aspectRatio(1.8f)
+                    .background(
+                        MaterialTheme.colorScheme.primary,
+                        shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp))
+                )
+                navItems.forEachIndexed { index, navigationItem ->
                     NavigationDrawerItem(
                         label = {
                             Text(text = navigationItem.title)
@@ -58,8 +71,15 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                         onClick = {
                             selectedItemIndex = index
                             scope.launch {
-                                if(selectedItemIndex == 0){
-                                    navigator.navigate(SearchLetterDestination)
+                                when(selectedItemIndex){
+                                    0 -> {
+                                        delay(500L)
+                                        drawerState.close()
+                                    }
+                                    1 -> {
+                                        delay(500L)
+                                        navigator.navigate(SearchLetterDestination)
+                                    }
                                 }
                             }
                         },
@@ -97,7 +117,11 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                             }
                         }
                         ) {
-                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu", tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                            Icon(
+                                imageVector = Icons.Default.Menu, 
+                                contentDescription = "Menu", 
+                                tint = MaterialTheme.colorScheme.onTertiaryContainer
+                            )
                         }
                     }
                 )

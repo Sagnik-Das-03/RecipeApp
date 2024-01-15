@@ -2,13 +2,9 @@ package com.example.recipeapp.util
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
 import com.example.recipeapp.R
 import com.example.recipeapp.presentation.components.navdrawer.components.NavigationItem
 
@@ -21,7 +17,12 @@ val backgrounds = mutableListOf<Int>(
     R.drawable.food10, R.drawable.food11, R.drawable.food12)
 
 
-val items = listOf(
+val navItems = listOf(
+    NavigationItem(
+        title = "Home",
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home
+    ),
     NavigationItem(
         title = "Search by First Letter",
         selectedIcon = Icons.Filled.Search,

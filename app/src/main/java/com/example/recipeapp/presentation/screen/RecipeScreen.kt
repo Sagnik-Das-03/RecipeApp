@@ -1,5 +1,6 @@
 package com.example.recipeapp.presentation.screen
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +36,10 @@ import com.example.recipeapp.presentation.components.ThumbNail
 import com.example.recipeapp.presentation.components.navdrawer.components.NavigationDrawer
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.response.RetrofitInstance
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
@@ -45,6 +52,7 @@ import java.time.format.DateTimeFormatter.ofLocalizedDateTime
 import java.time.format.FormatStyle
 
 private const val TAG = "HomeScreen"
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @RootNavGraph(start = true)
 @Destination
@@ -143,6 +151,3 @@ fun RecipeItem(recipe: Meal) {
     Instructions(recipe= recipe)
     IngredientsList(recipe = recipe)// Add more UI components based on your Recipe data model
 }
-
-
-

@@ -69,8 +69,8 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.activity:activity-compose:1.8.2")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     implementation("androidx.compose.ui:ui")
@@ -89,15 +89,17 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     //Coroutines
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation ("com.google.accompanist:accompanist-swiperefresh:0.27.0")
     //Compose Destinations
     implementation("io.github.raamcosta.compose-destinations:core:1.9.55")
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.55")
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation ("androidx.browser:browser:1.5.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation ("androidx.browser:browser:1.7.0")
 
+    //Accompanist
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 }

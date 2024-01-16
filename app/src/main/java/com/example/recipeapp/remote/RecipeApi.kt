@@ -10,7 +10,7 @@ interface RecipeApi  {
     suspend fun getRandomRecipe() : Response<RandomMeal>
 
     // www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
-    @GET("/search.php")
+    @GET("search.php")
     suspend fun getMealByName(@Query("s") name: String): Response<SearchMealByName>
 
     //https://www.themealdb.com/api/json/v1/1/categories.php

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -69,11 +71,11 @@ fun ThumbNailItem(recipe: Meal) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 40.dp, bottom = 30.dp))
-                .fillMaxWidth()
+                .fillMaxHeight(0.9f)
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AsyncImage(
@@ -98,7 +100,7 @@ fun ThumbNailItem(recipe: Meal) {
             Spacer(modifier = Modifier.size(15.dp))
             Column {
                 Text(
-                    text = "Cruisine: ${recipe.strArea}",
+                    text = "Cuisine : ${recipe.strArea}",
                     fontStyle = FontStyle.Italic,
                     fontWeight = FontWeight.ExtraBold,
                     fontSize = 20.sp,
@@ -117,13 +119,9 @@ fun ThumbNailItem(recipe: Meal) {
                 Spacer(modifier = Modifier.size(25.dp))
             }
             ElevatedButton(
+                shape = ButtonDefaults.elevatedShape,
                 onClick = { context.openCustomTab(recipe.strYoutube) },
-                modifier = Modifier.shadow(
-                    elevation = 8.dp,
-                    ambientColor = Color.Red,
-                    spotColor = Color.Red
-                ),
-                colors = ButtonDefaults.filledTonalButtonColors(Color.Red)
+                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.Red)
             ) {
                 Text(
                     text = "Open in YouTube",
@@ -138,7 +136,7 @@ fun ThumbNailItem(recipe: Meal) {
                 )
             }
             Spacer(modifier = Modifier.size(10.dp))
-            OutlinedButton(
+            FilledTonalButton(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     contentColor = MaterialTheme.colorScheme.onPrimaryContainer

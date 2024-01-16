@@ -14,7 +14,7 @@ interface RecipeApi  {
     suspend fun getMealByName(@Query("s") name: String): Response<SearchMealByName>
 
     //https://www.themealdb.com/api/json/v1/1/categories.php
-    @GET("/categories.php")
+    @GET("categories.php")
     suspend fun listCategories(): Response<ListOfCategories>
 
     // www.themealdb.com/api/json/v1/1/search.php?f=a

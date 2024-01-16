@@ -2,8 +2,10 @@ package com.example.recipeapp.util
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
 import com.example.recipeapp.R
 import com.example.recipeapp.presentation.components.navdrawer.components.NavigationItem
@@ -24,7 +26,7 @@ val navItems = listOf(
         unselectedIcon = Icons.Outlined.Home
     ),
     NavigationItem(
-        title = "Search by First Letter",
+        title = "Search by Letter",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
     ),
@@ -35,7 +37,7 @@ val navItems = listOf(
     ),
     NavigationItem(
         title = "All Meal Categories",
-        selectedIcon = Icons.Filled.Search,
-        unselectedIcon = Icons.Outlined.Search,
+        selectedIcon = Icons.Filled.List,
+        unselectedIcon = Icons.Outlined.List,
     ),
 )

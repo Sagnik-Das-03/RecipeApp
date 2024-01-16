@@ -37,7 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.recipeapp.presentation.components.searchbar.SearchBar
-import com.example.recipeapp.presentation.components.thumnail.ThumbNailItem
+import com.example.recipeapp.presentation.components.listitems.ThumbNailItem
 import com.example.recipeapp.presentation.screen.destinations.RecipeScreenDestination
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.response.RetrofitInstance

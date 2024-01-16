@@ -92,16 +92,16 @@ fun SearchName(navigator: DestinationsNavigator) {
                     Spacer(modifier = Modifier.height(3.dp))
                     if(query.isEmpty()){
                         Text(text = "",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.secondary)
                     }else if(query.isNotEmpty() && isError){
                         Text(text = "Invalid Letter",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.error)
                     }else if(!isLoading && query.isNotEmpty()){
                         Text(
                             text = "Results: ${recipes.size}",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary)
                     }
                 }
@@ -114,8 +114,8 @@ fun SearchName(navigator: DestinationsNavigator) {
                             delay(5000L)
                             if (
                                 query.length > 1
-                                && !query.matches("[0-9]+".toRegex())
-                                && !query.matches("[^a-zA-Z0-9 ]".toRegex())
+                                && !query.contains(regex = "[0-9]+".toRegex())
+                                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
                             ) {
                                 try {
                                     val response = RetrofitInstance.api.getMealByName(query)
@@ -146,6 +146,13 @@ fun SearchName(navigator: DestinationsNavigator) {
                             ) {
                                 isLoading = true
                                 Log.e(TAG, "Error Calling API for empty blank query $query : $dateTime")
+                            }else if (
+                                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+                            ) {
+                                isError = true
+                                isLoading = false
+                                errorMsg = "Search Query: $query is not a Word"
+                                Log.e(TAG, "Error Calling API for query $query : $dateTime")
                             } else {
                                 isError = false
                             }

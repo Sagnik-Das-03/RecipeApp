@@ -75,7 +75,7 @@ fun ThumbNailItem(recipe: Meal) {
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 40.dp, bottom = 30.dp))
-                .fillMaxHeight(0.9f)
+                .fillMaxHeight()
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AsyncImage(

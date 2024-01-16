@@ -45,6 +45,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.time.LocalDateTime
@@ -65,6 +66,7 @@ fun RecipeScreen(navigator: DestinationsNavigator) {
     var initialApiCalled by rememberSaveable { mutableStateOf(false) }
     val dateTime = LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
     LaunchedEffect(Unit) {
+        delay(3000L)
         if (!initialApiCalled) {
             try {
                 val response = RetrofitInstance.api.getRandomRecipe()

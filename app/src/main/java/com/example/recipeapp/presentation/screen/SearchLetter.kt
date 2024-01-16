@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -75,6 +77,9 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     FilledTonalButton(
+                        modifier = Modifier
+                            .fillMaxWidth(0.2f)
+                            .fillMaxHeight(0.06f),
                         onClick = {
                                 coroutineScope.launch {
                                     delay(500L)
@@ -92,16 +97,16 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                     Spacer(modifier = Modifier.height(3.dp))
                     if(query.isEmpty()){
                         Text(text = "",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.secondary)
                     }else if(query.isNotEmpty() && isError){
                         Text(text = "Invalid Letter",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.error)
                     }else{
                         Text(
                             text = "Results: ${recipes.size}",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary)
                     }
                 }
@@ -112,6 +117,7 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                         query = it
                         coroutineScope.launch {
                             delay(250L)
+                            query.replace(" ", "")
                             if (
                                 query.length == 1
                                 && !query.matches("[0-9]+".toRegex())

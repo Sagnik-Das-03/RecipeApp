@@ -22,11 +22,11 @@ interface RecipeApi  {
     suspend fun getMealByFirstLetter(@Query("f") firstLetter: String): Response<ListMealByFirstLetter>
 
     //https://www.themealdb.com/api/json/v1/1/list.php?a=list
-    @GET("/list.php")
+    @GET("list.php")
     suspend fun listAreas(@Query("a") areas: String = "list"): Response<ListOfArea>
 
     // www.themealdb.com/api/json/v1/1/list.php?i=list
-    @GET("/list.php")
+    @GET("list.php")
     suspend fun listIngredients(@Query("i") ingredients: String = "list"): Response<ListOfIngredients>
 
     //https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast

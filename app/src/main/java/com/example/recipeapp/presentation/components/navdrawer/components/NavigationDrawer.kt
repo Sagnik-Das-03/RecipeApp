@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.recipeapp.R
 import com.example.recipeapp.presentation.screen.RecipeItem
+import com.example.recipeapp.presentation.screen.destinations.AreasScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.CategoriesScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.RecipeScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.SearchLetterDestination
@@ -106,6 +107,10 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                                     3 -> {
                                         delay(1000L)
                                         navigator.navigate(CategoriesScreenDestination)
+                                    }
+                                    4 -> {
+                                        delay(1000L)
+                                        navigator.navigate(AreasScreenDestination)
                                     }
                                 }
                             }

@@ -66,7 +66,7 @@ fun RecipeScreen(navigator: DestinationsNavigator) {
     var initialApiCalled by rememberSaveable { mutableStateOf(false) }
     val dateTime = LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
     LaunchedEffect(Unit) {
-        delay(3000L)
+        delay(250L)
         if (!initialApiCalled) {
             try {
                 val response = RetrofitInstance.api.getRandomRecipe()
@@ -147,9 +147,3 @@ fun RecipeScreen(navigator: DestinationsNavigator) {
     }
 }
 
-@Composable
-fun RecipeItem(recipe: Meal) {
-    ThumbNail(recipe = recipe)
-    Instructions(recipe= recipe)
-    IngredientsList(recipe = recipe)// Add more UI components based on your Recipe data model
-}

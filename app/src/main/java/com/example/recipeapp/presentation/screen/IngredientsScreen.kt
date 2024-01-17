@@ -13,19 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.outlined.KeyboardArrowRight
 import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,37 +35,37 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.recipeapp.presentation.components.listitems.AreasItem
+import com.example.recipeapp.presentation.components.listitems.IngredientItem
 import com.example.recipeapp.presentation.screen.destinations.RecipeScreenDestination
-import com.example.recipeapp.remote.Area
 import com.example.recipeapp.remote.Ingredients
 import com.example.recipeapp.response.RetrofitInstance
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.delay
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-private const val TAG = "AreasScreen"
+private const val TAG = "IngredientsScreen"
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun AreasScreen(navigator: DestinationsNavigator) {
-    var areas by rememberSaveable { mutableStateOf<List<Area>>(emptyList()) }
+fun IngredientsScreen(navigator: DestinationsNavigator) {
+    var ingredients by rememberSaveable { mutableStateOf<List<Ingredients>>(emptyList()) }
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var isError by rememberSaveable { mutableStateOf(false) }
     var initialApiCalled by rememberSaveable { mutableStateOf(false) }
     val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+    // TODO: implement Search
     LaunchedEffect(Unit) {
         if (!initialApiCalled) {
+            delay(250L)
             try {
-                val response = RetrofitInstance.api.listAreas("list")
+                val response = RetrofitInstance.api.listIngredients()
                 if (response.isSuccessful) {
-                    Log.i(TAG, "${response.body()}")
-                    areas = response.body()?.meals ?: emptyList()
-                    Log.i(TAG, "$areas")
+                    ingredients = response.body()?.meals ?: emptyList()
                     Log.i(TAG, "API called: $dateTime")
                 } else {
                     isError = true
@@ -127,26 +122,30 @@ fun AreasScreen(navigator: DestinationsNavigator) {
                     onClick = { navigator.navigate(RecipeScreenDestination) }) {
                     Icon(
                         imageVector = Icons.Filled.Home,
-                        contentDescription = "Back to Home")
+                        contentDescription = "Back to Home"
+                    )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "List of Cuisines",
+                    text = "List of Ingredients",
                     textAlign = TextAlign.Center,
                     fontFamily = FontFamily.Cursive,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(vertical = 10.dp))
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
             }
             Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn{
+            LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(count = 2)){
                 items(
-                    items = areas
-                ){area->
-                    AreasItem(area = area)
+                    items = ingredients,
+                    key = { ingredient->
+                        ingredient.idIngredient
+                    }
+                ){ingredient->
+                    IngredientItem(ingredient = ingredient)
                 }
             }
         }
     }
 }
-

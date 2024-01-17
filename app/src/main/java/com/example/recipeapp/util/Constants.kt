@@ -49,5 +49,10 @@ val navItems = listOf(
         title = "List of Ingredients",
         selectedIcon = Icons.Filled.List,
         unselectedIcon = Icons.Outlined.List,
+    ),
+    NavigationItem(
+        title = "Filter By Category",
+        selectedIcon = Icons.Filled.Search,
+        unselectedIcon = Icons.Outlined.Search,
     )
 )

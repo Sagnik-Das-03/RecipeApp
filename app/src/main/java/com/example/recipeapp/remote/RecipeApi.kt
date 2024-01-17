@@ -34,8 +34,8 @@ interface RecipeApi  {
     suspend fun filterByIngredient(@Query("i") ingredient: String): Response<FilterByIngredient>
 
     //https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood
-    @GET("/filter.php")
-    suspend fun filterByCategory(@Query("i") category: String): Response<FilterByCategory>
+    @GET("filter.php")
+    suspend fun filterByCategory(@Query("c") category: String): Response<FilterByCategory>
 
     //https://www.themealdb.com/api/json/v1/1/filter.php?a=Canadian
     @GET("/filter.php")

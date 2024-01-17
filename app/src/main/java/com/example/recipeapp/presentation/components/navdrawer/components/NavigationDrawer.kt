@@ -44,6 +44,7 @@ import com.example.recipeapp.R
 import com.example.recipeapp.presentation.components.listitems.RecipeItem
 import com.example.recipeapp.presentation.screen.destinations.AreasScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.CategoriesScreenDestination
+import com.example.recipeapp.presentation.screen.destinations.FilterCategoryScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.IngredientsScreenDestination
 import com.example.recipeapp.presentation.screen.destinations.SearchLetterDestination
 import com.example.recipeapp.presentation.screen.destinations.SearchNameDestination
@@ -112,6 +113,10 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                                         delay(1000L)
                                         navigator.navigate(IngredientsScreenDestination)
                                     }
+                                    6 -> {
+                                        delay(1000L)
+                                        navigator.navigate(FilterCategoryScreenDestination)
+                                    }
                                 }
                             }
                         },
@@ -140,10 +145,11 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                         Text(
                             text = "PalateCraft",
                             letterSpacing = 3.sp,
-                            style = MaterialTheme.typography.displayMedium,
+                            style = MaterialTheme.typography.displaySmall,
                             color = MaterialTheme.colorScheme.onPrimary,
                             fontFamily = FontFamily.Cursive,
-                            fontWeight = FontWeight.ExtraBold
+                            fontWeight = FontWeight.ExtraBold,
+                            modifier = Modifier.padding(vertical = 16.dp)
                         )
                     }
                 },

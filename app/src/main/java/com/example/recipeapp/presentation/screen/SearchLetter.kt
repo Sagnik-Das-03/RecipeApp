@@ -113,6 +113,7 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                 Spacer(modifier = Modifier.width(10.dp))
                 SearchBar(
                     label = "Search by Letter",
+                    onClearClicked = { query = "" },
                     onSearchQueryChanged = {
                         query = it
                         coroutineScope.launch {

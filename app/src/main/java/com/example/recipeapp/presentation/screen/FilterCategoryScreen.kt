@@ -109,6 +109,7 @@ fun FilterCategoryScreen(navigator: DestinationsNavigator) {
                 Spacer(modifier = Modifier.width(10.dp))
                 SearchBar(
                     label = "Search by Category",
+                    onClearClicked = { query = "" },
                     onSearchQueryChanged = {
                         query = it
                         coroutineScope.launch {

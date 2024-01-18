@@ -65,7 +65,7 @@ fun RecipeScreen(navigator: DestinationsNavigator) {
     var initialApiCalled by rememberSaveable { mutableStateOf(false) }
     val dateTime = LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
     LaunchedEffect(Unit) {
-        delay(3000L)
+        delay(4500L)
         if (!initialApiCalled) {
             try {
                 val response = RetrofitInstance.api.getRandomRecipe()

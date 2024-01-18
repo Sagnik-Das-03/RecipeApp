@@ -108,6 +108,7 @@ fun SearchName(navigator: DestinationsNavigator) {
                 Spacer(modifier = Modifier.width(10.dp))
                 SearchBar(
                     label = "Search by Name",
+                    onClearClicked = { query = "" },
                     onSearchQueryChanged = {
                         query = it
                         coroutineScope.launch {

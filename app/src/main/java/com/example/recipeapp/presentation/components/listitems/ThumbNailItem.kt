@@ -2,6 +2,7 @@ package com.example.recipeapp.presentation.components.listitems
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -50,7 +51,7 @@ import com.example.recipeapp.presentation.components.videoplayer.YoutubePlayer
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.ui.theme.WhiteA90
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThumbNailItem(recipe: Meal) {
     var isSheetOpen by remember { mutableStateOf(false) }
@@ -60,11 +61,9 @@ fun ThumbNailItem(recipe: Meal) {
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.onSecondary)
-            .padding(top = 100.dp, start = 10.dp, end = 10.dp)
-            .fillMaxHeight(),
+            .padding(top = 120.dp, start = 10.dp, end = 10.dp),
         contentAlignment = Alignment.TopCenter
     ) {
-        val context = LocalContext.current
         Column(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -79,7 +78,9 @@ fun ThumbNailItem(recipe: Meal) {
             AsyncImage(
                 model = recipe.strMealThumb, contentDescription = "RecipeImg",
                 modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
+                    .clip(RoundedCornerShape(6.dp))
+                    .border(width= 6.dp, color = MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(6.dp))
+
             )
             Spacer(modifier = Modifier.size(10.dp))
             Text(
@@ -152,8 +153,9 @@ fun ThumbNailItem(recipe: Meal) {
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 30.sp,
                                 fontFamily = FontFamily.SansSerif,
-                                color = MaterialTheme.colorScheme.secondary)
-                            Divider(thickness = 3.dp, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(0.dp, 15.dp))
+                                color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(horizontal = 16.dp))
+                            Divider(thickness = 3.dp, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(16.dp, 15.dp))
                             Spacer(modifier = Modifier.height(4.dp))
                             YoutubePlayer(youtubeVideoId = recipe.strYoutube.substringAfter("="), lifecycleOwner = lifecycleOwner)
                             Spacer(modifier = Modifier.height(16.dp))

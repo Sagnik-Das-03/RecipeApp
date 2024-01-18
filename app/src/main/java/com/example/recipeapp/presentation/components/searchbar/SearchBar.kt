@@ -21,7 +21,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
-fun SearchBar(label: String, onSearchQueryChanged: (String) -> Unit) {
+fun SearchBar(label: String, onSearchQueryChanged: (String) -> Unit, onClearClicked: () -> Unit) {
     var query by remember { mutableStateOf("") }
     OutlinedTextField(
         value = query,
@@ -40,6 +40,7 @@ fun SearchBar(label: String, onSearchQueryChanged: (String) -> Unit) {
                 contentDescription = "Clear Button",
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {
+                    onClearClicked()
                     query = ""
                 })
         },

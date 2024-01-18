@@ -8,24 +8,29 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Snackbar
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,10 +40,10 @@ import androidx.compose.ui.draw.paint
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -48,17 +53,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.recipeapp.R
+import com.example.recipeapp.presentation.components.videoplayer.YoutubePlayer
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.ui.theme.Black40
 import com.example.recipeapp.ui.theme.BlackA60
 import com.example.recipeapp.ui.theme.WhiteA90
 import com.example.recipeapp.util.backgrounds
-import com.example.recipeapp.util.openCustomTab
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThumbNail(recipe: Meal) {
     val background by remember{ mutableIntStateOf(backgrounds.random()) }
     val width = LocalConfiguration.current.screenWidthDp
+    var isSheetOpen by remember { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
             .aspectRatio(0.5f)
@@ -122,7 +130,7 @@ fun ThumbNail(recipe: Meal) {
                     color = WhiteA90)
                 Spacer(modifier = Modifier.size(25.dp))
             }
-            ElevatedButton(onClick = {context.openCustomTab(recipe.strYoutube)},
+            ElevatedButton(onClick = { isSheetOpen = true },
                 modifier = Modifier.shadow(elevation = 8.dp, ambientColor = Color.Red, spotColor = Color.Red),
                 colors = ButtonDefaults.filledTonalButtonColors(Color.Red)
             ) {
@@ -154,6 +162,34 @@ fun ThumbNail(recipe: Meal) {
                     modifier = Modifier
                         .size(35.dp)
                         .aspectRatio(1f))
+            }
+            if (isSheetOpen){
+                ModalBottomSheet(onDismissRequest = { isSheetOpen = false }) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.5f)
+                            .padding(vertical = 8.dp, horizontal = 8.dp),
+                        contentAlignment = Alignment.TopCenter){
+                        Column (
+                            verticalArrangement = Arrangement.Center,
+                        ){
+                            Text(text = "Tutorial Video",
+                                fontStyle = FontStyle.Italic,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 30.sp,
+                                fontFamily = FontFamily.SansSerif,
+                                color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Divider(
+                                thickness = 3.dp,color = MaterialTheme.colorScheme.secondary,
+                                modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+                            Spacer(modifier = Modifier.height(8.dp))
+                            YoutubePlayer(youtubeVideoId = recipe.strYoutube.substringAfter("="), lifecycleOwner = lifecycleOwner)
+                        }
+                    }
+                }
             }
         }
     }

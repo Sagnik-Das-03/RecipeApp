@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,9 +18,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
-import androidx.compose.material.icons.twotone.PlayArrow
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -34,9 +34,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,9 +46,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.recipeapp.presentation.components.IngredientsList
 import com.example.recipeapp.presentation.components.Instructions
+import com.example.recipeapp.presentation.components.videoplayer.YoutubePlayer
 import com.example.recipeapp.remote.Meal
 import com.example.recipeapp.ui.theme.WhiteA90
-import com.example.recipeapp.util.openCustomTab
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -56,11 +56,13 @@ fun ThumbNailItem(recipe: Meal) {
     var isSheetOpen by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val width = LocalConfiguration.current.screenWidthDp
+    val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
             .background(MaterialTheme.colorScheme.onSecondary)
-            .padding(top = 100.dp, start = 10.dp, end = 10.dp),
-        contentAlignment = Alignment.Center
+            .padding(top = 100.dp, start = 10.dp, end = 10.dp)
+            .fillMaxHeight(),
+        contentAlignment = Alignment.TopCenter
     ) {
         val context = LocalContext.current
         Column(
@@ -69,10 +71,9 @@ fun ThumbNailItem(recipe: Meal) {
             modifier = Modifier
                 .background(
                     color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
-                .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 40.dp, bottom = 30.dp))
-                .fillMaxHeight()
+                .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 50.dp))
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AsyncImage(
@@ -115,23 +116,6 @@ fun ThumbNailItem(recipe: Meal) {
                 )
                 Spacer(modifier = Modifier.size(25.dp))
             }
-            ElevatedButton(
-                shape = ButtonDefaults.elevatedShape,
-                onClick = { context.openCustomTab(recipe.strYoutube) },
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color.Red)
-            ) {
-                Text(
-                    text = "Open in YouTube",
-                    color = MaterialTheme.colorScheme.onTertiary
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Icon(
-                    imageVector = Icons.TwoTone.PlayArrow,
-                    contentDescription = "Open Instruction",
-                    tint = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
             Spacer(modifier = Modifier.size(10.dp))
             FilledTonalButton(
                 colors = ButtonDefaults.buttonColors(
@@ -146,7 +130,7 @@ fun ThumbNailItem(recipe: Meal) {
                 Spacer(modifier = Modifier.width(10.dp))
                 Icon(
                     imageVector = Icons.TwoTone.Add,
-                    contentDescription = "Open Instruction",
+                    contentDescription = "Open Details",
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(18.dp)
                 )
@@ -163,6 +147,16 @@ fun ThumbNailItem(recipe: Meal) {
                                 .padding(10.dp)
                                 .clip(shape = RoundedCornerShape(10.dp))
                         ) {
+                            Text(text = "Tutorial",
+                                fontStyle = FontStyle.Italic,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 30.sp,
+                                fontFamily = FontFamily.SansSerif,
+                                color = MaterialTheme.colorScheme.secondary)
+                            Divider(thickness = 3.dp, color = MaterialTheme.colorScheme.secondary, modifier = Modifier.padding(0.dp, 15.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
+                            YoutubePlayer(youtubeVideoId = recipe.strYoutube.substringAfter("="), lifecycleOwner = lifecycleOwner)
+                            Spacer(modifier = Modifier.height(16.dp))
                             Instructions(recipe = recipe)
                             IngredientsList(recipe = recipe)
                         }

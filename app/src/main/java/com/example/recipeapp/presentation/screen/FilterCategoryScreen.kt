@@ -170,7 +170,7 @@ fun FilterCategoryScreen(navigator: DestinationsNavigator) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Search for a Recipe",
+                        text = "Search for a Category",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.primary
                     )

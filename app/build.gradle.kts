@@ -17,11 +17,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.example.recipeapp"
+    namespace = "com.sd.palatecraft"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.recipeapp"
+        applicationId = "com.sd.palatecraft"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

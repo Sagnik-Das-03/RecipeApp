@@ -97,9 +97,10 @@ dependencies {
     ksp("io.github.raamcosta.compose-destinations:ksp:1.9.55")
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation ("androidx.browser:browser:1.7.0")
-
+    //ViewModel
+    implementation ("androidx.compose.runtime:runtime-livedata:1.5.4")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     //Accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 

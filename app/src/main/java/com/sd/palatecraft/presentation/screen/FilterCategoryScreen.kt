@@ -60,7 +60,7 @@ fun FilterCategoryScreen(navigator: DestinationsNavigator) {
     var isLoading by rememberSaveable { mutableStateOf(true) }
     var isError by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    var query by remember { mutableStateOf("Seafood") }
+    var query by remember { mutableStateOf("") }
     var errorMsg by remember { mutableStateOf("") }
     val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
     Scaffold(

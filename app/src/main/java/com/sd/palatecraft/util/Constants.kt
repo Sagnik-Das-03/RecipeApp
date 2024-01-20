@@ -11,6 +11,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import com.sd.palatecraft.R
 import com.sd.palatecraft.presentation.components.navdrawer.components.NavigationItem
+import com.sd.palatecraft.ui.theme.Blue300
+import com.sd.palatecraft.ui.theme.Blue500
+import com.sd.palatecraft.ui.theme.Blue700
+import com.sd.palatecraft.ui.theme.Purple300
+import com.sd.palatecraft.ui.theme.Purple700
 
 val backgrounds = mutableListOf<Int>(
     R.drawable.food1, R.drawable.food2, R.drawable.food3,
@@ -20,9 +25,7 @@ val backgrounds = mutableListOf<Int>(
     R.drawable.food7, R.drawable.food8, R.drawable.food9,
     R.drawable.food10, R.drawable.food11, R.drawable.food12)
 
-val colors = mutableListOf<Color>(
 
-)
 
 val navItems = listOf(
     NavigationItem(

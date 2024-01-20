@@ -80,9 +80,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var visible by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }

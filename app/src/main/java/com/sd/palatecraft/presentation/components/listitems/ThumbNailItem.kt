@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
@@ -59,8 +62,9 @@ fun ThumbNailItem(recipe: Meal) {
     val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.onSecondary)
-            .padding(top = 120.dp, start = 15.dp, end = 0.dp, bottom = 60.dp),
+            .padding(top = 120.dp, start = 15.dp, end = 0.dp, bottom = 80.dp),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
@@ -68,18 +72,16 @@ fun ThumbNailItem(recipe: Meal) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 50.dp))
+                .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 50.dp, bottom = 50.dp))
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AsyncImage(
                 model = recipe.strMealThumb, contentDescription = "RecipeImg",
                 modifier = Modifier
-                    .clip(RoundedCornerShape(6.dp))
-                    .border(width= 6.dp, color = MaterialTheme.colorScheme.onPrimary, shape = RoundedCornerShape(6.dp))
-
+                    .clip(RoundedCornerShape(16.dp))
             )
             Spacer(modifier = Modifier.size(10.dp))
             Text(
@@ -89,7 +91,7 @@ fun ThumbNailItem(recipe: Meal) {
                 style = MaterialTheme.typography.headlineSmall,
                 fontFamily = FontFamily.SansSerif,
                 lineHeight = 35.sp,
-                color = WhiteA90,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.widthIn(
                     min= ((width*0.7).toInt().dp),
@@ -102,7 +104,7 @@ fun ThumbNailItem(recipe: Meal) {
                     fontWeight = FontWeight.ExtraBold,
                     style = MaterialTheme.typography.labelLarge,
                     fontFamily = FontFamily.SansSerif,
-                    color = WhiteA90
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 Spacer(modifier = Modifier.size(5.dp))
                 Text(
@@ -110,7 +112,7 @@ fun ThumbNailItem(recipe: Meal) {
                     fontWeight = FontWeight.ExtraBold,
                     style = MaterialTheme.typography.labelLarge,
                     fontFamily = FontFamily.SansSerif,
-                    color = WhiteA90
+                    color = MaterialTheme.colorScheme.secondary
                 )
                 Spacer(modifier = Modifier.size(25.dp))
             }
@@ -122,14 +124,11 @@ fun ThumbNailItem(recipe: Meal) {
                 ),
                 onClick = { isSheetOpen = true }) {
                 Text(
-                    text = "Open Instructions",
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
+                    text = "Open Instructions")
                 Spacer(modifier = Modifier.width(10.dp))
                 Icon(
                     imageVector = Icons.TwoTone.Add,
                     contentDescription = "Open Details",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(18.dp)
                 )
                 if(isSheetOpen){

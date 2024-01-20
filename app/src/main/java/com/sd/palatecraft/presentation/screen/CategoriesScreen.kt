@@ -136,7 +136,7 @@ fun CategoriesScreen(navigator: DestinationsNavigator) {
                 items(
                     items = categories
                 ){category->
-                    CategoryItem(category = category)
+                    CategoryItem(category = category, navigator = navigator)
                 }
             }
         }

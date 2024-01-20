@@ -90,13 +90,13 @@ fun ThumbNail(recipe: Meal) {
                 .padding(PaddingValues(start = 40.dp, top = 20.dp, end = 40.dp, bottom = 20.dp))
         ){
             Text(text = "Recipe of the Day",
-                fontSize =45.sp,
+                fontSize =40.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = WhiteA90,
                 modifier = Modifier
                     .padding(10.dp),
                 fontFamily = FontFamily.Cursive,
-                fontStyle = FontStyle.Italic,
+                fontStyle = FontStyle.Italic
             )
             Spacer(modifier = Modifier.size(30.dp))
             AsyncImage(model = recipe.strMealThumb, contentDescription = "RecipeImg",

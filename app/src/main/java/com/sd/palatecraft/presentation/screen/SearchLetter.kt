@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +46,7 @@ import com.sd.palatecraft.remote.Meal
 import com.sd.palatecraft.response.RetrofitInstance
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sd.palatecraft.RecipeViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -59,14 +61,13 @@ private const val TAG = "SearchLetter"
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Destination
 @Composable
-fun SearchLetter(navigator: DestinationsNavigator) {
-    var recipes by rememberSaveable { mutableStateOf<List<Meal>>(emptyList()) }
-    var isLoading by rememberSaveable { mutableStateOf(true) }
-    var isError by rememberSaveable { mutableStateOf(false) }
+fun SearchLetter(navigator: DestinationsNavigator, viewModel: RecipeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     val coroutineScope = rememberCoroutineScope()
-    var query by remember { mutableStateOf("") }
-    var errorMsg by remember { mutableStateOf("") }
-    val dateTime = LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
+    val recipes by viewModel.recipes.collectAsState(emptyList())
+    val isLoading by viewModel.isLoading.collectAsState(true)
+    val isError by viewModel.isError.collectAsState(false)
+    val message by viewModel.message.collectAsState("")
+    val currentQuery by viewModel.currentQuery.collectAsState()
     Scaffold(
         containerColor = MaterialTheme.colorScheme.inverseOnSurface,
         topBar = {
@@ -98,11 +99,11 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                         )
                     }
                     Spacer(modifier = Modifier.height(3.dp))
-                    if(query.isEmpty()){
+                    if(currentQuery.isEmpty()){
                         Text(text = "",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.secondary)
-                    }else if(query.isNotEmpty() && isError){
+                    }else if(currentQuery.isNotEmpty() && isError){
                         Text(text = "Invalid Letter",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.error)
@@ -116,70 +117,18 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                 Spacer(modifier = Modifier.width(10.dp))
                 SearchBar(
                     label = "Search by Letter",
-                    onClearClicked = { query = "" },
+                    onClearClicked = { viewModel.updateQuery("") },
                     onSearchQueryChanged = {
-                        query = it
                         coroutineScope.launch {
                             delay(250L)
-                            query.replace(" ", "")
-                            if (
-                                query.length == 1
-                                && !query.matches("[0-9]+".toRegex())
-                                && !query.matches("[^a-zA-Z0-9 ]".toRegex())
-                            ) {
-                                try {
-                                    val response = RetrofitInstance.api.getMealByFirstLetter(query)
-                                    if (response.isSuccessful) {
-                                        recipes = response.body()?.meals ?: emptyList()
-                                        Log.i(TAG, "Api called: $dateTime")
-                                        isError = false
-                                        isLoading = false
-                                    } else {
-                                        isError = true
-                                        errorMsg = "Error Calling API for query $query : $dateTime"
-                                        Log.e(TAG, errorMsg)
-                                    }
-                                } catch (e: HttpException) {
-                                    isError = true
-                                    errorMsg = "Exception:${e.message} \n time: $dateTime"
-                                    Log.e(TAG, errorMsg)
-                                } catch (e: SocketTimeoutException) {
-                                    isError = true
-                                    errorMsg = "Exception:${e.message} \n time: $dateTime"
-                                    Log.e(TAG, errorMsg)
-                                } finally {
-                                    isLoading = false
-                                }
-
-                            } else if (
-                                query.matches("[0-9]+".toRegex()) || query.matches("[^a-zA-Z0-9 ]".toRegex())
-                            ) {
-                                isLoading = false
-                                isError = true
-                                errorMsg = "Search Query: $query is not a Letter"
-                                Log.e(TAG, "Error Calling API for query $query : $dateTime")
-                            } else if (
-                                query.isBlank()
-                            ) {
-                                isLoading = true
-                                Log.e(TAG, "Error Calling API for empty query $query : $dateTime")
-                            }else if (
-                                query.length>1
-                            ) {
-                                isError = true
-                                isLoading = false
-                                errorMsg = "Search Query must be a Single Letter"
-                                Log.e(TAG, "Error Calling API for empty query $query : $dateTime")
-                            } else {
-                                isError = false
-                            }
+                            viewModel.searchByLetter(letter = it)
                         }
                     }
                 )
             }
         }
     ) {
-        if (isLoading || query.isBlank()) {
+        if (isLoading || currentQuery.isBlank()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -197,14 +146,14 @@ fun SearchLetter(navigator: DestinationsNavigator) {
                     )
                 }
             }
-        } else if (isError && query.isNotEmpty()) {
+        } else if (isError && currentQuery.isNotEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = errorMsg,
+                    text = message,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.error
                 )

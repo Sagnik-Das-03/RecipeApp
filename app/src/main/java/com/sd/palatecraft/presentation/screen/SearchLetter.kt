@@ -2,9 +2,7 @@ package com.sd.palatecraft.presentation.screen
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,30 +28,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.sd.palatecraft.presentation.components.searchbar.SearchBar
 import com.sd.palatecraft.presentation.components.listitems.ThumbNailItem
 import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
-import com.sd.palatecraft.remote.Meal
-import com.sd.palatecraft.response.RetrofitInstance
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sd.palatecraft.RecipeViewModel
+import com.sd.palatecraft.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofLocalizedDateTime
-import java.time.format.FormatStyle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 private const val TAG = "SearchLetter"
 
@@ -61,7 +48,7 @@ private const val TAG = "SearchLetter"
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Destination
 @Composable
-fun SearchLetter(navigator: DestinationsNavigator, viewModel: RecipeViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun SearchLetter(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val recipes by viewModel.recipes.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
@@ -118,10 +105,9 @@ fun SearchLetter(navigator: DestinationsNavigator, viewModel: RecipeViewModel = 
                 SearchBar(
                     label = "Search by Letter",
                     onClearClicked = { viewModel.updateQuery("") },
-                    onSearchQueryChanged = {
+                    onSearchQueryChanged = { query ->
                         coroutineScope.launch {
-                            delay(250L)
-                            viewModel.searchByLetter(letter = it)
+                            viewModel.searchByLetter(letter = query)
                         }
                     }
                 )

@@ -2,7 +2,6 @@ package com.sd.palatecraft.presentation.screen
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,44 +24,34 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.sd.palatecraft.presentation.components.searchbar.SearchBar
-import com.sd.palatecraft.presentation.components.listitems.ThumbNailItem
-import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
-import com.sd.palatecraft.remote.Meal
-import com.sd.palatecraft.response.RetrofitInstance
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sd.palatecraft.MainViewModel
+import com.sd.palatecraft.presentation.components.listitems.ThumbNailItem
+import com.sd.palatecraft.presentation.components.searchbar.SearchBar
+import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 private const val TAG = "SearchName"
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun SearchName(navigator: DestinationsNavigator) {
-    var recipes by rememberSaveable { mutableStateOf<List<Meal>>(emptyList()) }
-    var isLoading by rememberSaveable { mutableStateOf(true) }
-    var isError by rememberSaveable { mutableStateOf(false) }
+fun SearchName(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
     val coroutineScope = rememberCoroutineScope()
-    var query by remember { mutableStateOf("") }
-    var errorMsg by remember { mutableStateOf("") }
-    val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+    val recipes by viewModel.recipes.collectAsState(emptyList())
+    val isLoading by viewModel.isLoading.collectAsState(true)
+    val isError by viewModel.isError.collectAsState(false)
+    val message by viewModel.message.collectAsState("")
+    val currentQuery by viewModel.currentQuery.collectAsState()
     Scaffold(
         topBar = {
             Row(
@@ -90,15 +79,15 @@ fun SearchName(navigator: DestinationsNavigator) {
                         )
                     }
                     Spacer(modifier = Modifier.height(3.dp))
-                    if(query.isEmpty()){
+                    if(currentQuery.isEmpty()){
                         Text(text = "",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.secondary)
-                    }else if(query.isNotEmpty() && isError){
+                    }else if(currentQuery.isNotEmpty() && isError){
                         Text(text = "Invalid Letter",
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.error)
-                    }else if(!isLoading && query.isNotEmpty()){
+                    }else if(!isLoading && currentQuery.isNotEmpty()){
                         Text(
                             text = "Results: ${recipes.size}",
                             style = MaterialTheme.typography.labelLarge,
@@ -108,62 +97,17 @@ fun SearchName(navigator: DestinationsNavigator) {
                 Spacer(modifier = Modifier.width(10.dp))
                 SearchBar(
                     label = "Search by Name",
-                    onClearClicked = { query = "" },
-                    onSearchQueryChanged = {
-                        query = it
+                    onClearClicked = { viewModel.updateQuery("") },
+                    onSearchQueryChanged = { query ->
                         coroutineScope.launch {
-                            delay(5000L)
-                            if (
-                                query.length > 1
-                                && !query.contains(regex = "[0-9]+".toRegex())
-                                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
-                            ) {
-                                try {
-                                    val response = RetrofitInstance.api.getMealByName(query)
-                                    if (response.isSuccessful) {
-                                        recipes = response.body()?.meals ?: emptyList()
-                                        Log.i(TAG, "Api called: $dateTime")
-                                        isError = false
-                                        isLoading = false
-                                    } else {
-                                        isError = true
-                                        errorMsg = "Error Calling API for query $query : $dateTime"
-                                        Log.e(TAG, errorMsg)
-                                    }
-                                } catch (e: HttpException) {
-                                    isError = true
-                                    errorMsg = "Exception:${e.message} \n time: $dateTime"
-                                    Log.e(TAG, errorMsg)
-                                } catch (e: SocketTimeoutException) {
-                                    isError = true
-                                    errorMsg = "Exception:${e.message} \n time: $dateTime"
-                                    Log.e(TAG, errorMsg)
-                                } finally {
-                                    isLoading = false
-                                }
-
-                            } else if (
-                                query.isBlank()
-                            ) {
-                                isLoading = true
-                                Log.e(TAG, "Error Calling API for empty blank query $query : $dateTime")
-                            }else if (
-                                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
-                            ) {
-                                isError = true
-                                isLoading = false
-                                errorMsg = "Search Query: $query is not a Word"
-                                Log.e(TAG, "Error Calling API for query $query : $dateTime")
-                            } else {
-                                isError = false
-                            }
+                            viewModel.searchByName(query)
                         }
                     }
                 )
             }
         }
     ) {
-        if (isLoading || query.isBlank()) {
+        if (isLoading || currentQuery.isBlank()) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Column(
                     verticalArrangement = Arrangement.Center,
@@ -181,14 +125,14 @@ fun SearchName(navigator: DestinationsNavigator) {
                     )
                 }
             }
-        } else if (isError && query.isNotEmpty()) {
+        } else if (isError && currentQuery.isNotEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = errorMsg,
+                    text = message,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.error
                 )

@@ -18,10 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -37,7 +33,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.R
-import com.sd.palatecraft.RecipeViewModel
+import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.navdrawer.components.NavigationDrawer
 
 private const val TAG = "HomeScreen"
@@ -46,7 +42,7 @@ private const val TAG = "HomeScreen"
 @Destination
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RecipeScreen(navigator: DestinationsNavigator, viewModel: RecipeViewModel = viewModel()) {
+fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
     val recipes by viewModel.recipes.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)

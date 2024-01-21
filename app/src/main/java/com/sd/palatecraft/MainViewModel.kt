@@ -4,11 +4,11 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.sd.palatecraft.remote.Meal
-import com.sd.palatecraft.reposiory.RecipeRepository
+import com.sd.palatecraft.reposiory.MainRepository
 import com.sd.palatecraft.response.RetrofitInstance
+import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +21,8 @@ import java.time.format.DateTimeFormatter.ofLocalizedDateTime
 import java.time.format.FormatStyle
 private const val TAG = "RecipeViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
-class RecipeViewModel : ViewModel() {
-    private val repository = RecipeRepository()
+class MainViewModel : ViewModel() {
+    private val repository = MainRepository()
 
     private val _recipes = MutableStateFlow<List<Meal>>(emptyList())
     val recipes: StateFlow<List<Meal>> = _recipes.asStateFlow()
@@ -38,6 +38,11 @@ class RecipeViewModel : ViewModel() {
 
     private val _currentQuery = MutableStateFlow("")
     val currentQuery: StateFlow<String> = _currentQuery.asStateFlow()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getCurrentDateTime(): String {
+        return LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
+    }
 
     fun getRandomRecipe(){
         fetchRandomRecipes()
@@ -68,6 +73,8 @@ class RecipeViewModel : ViewModel() {
     fun refreshRandomRecipe(isRefreshing: Boolean){
         refreshRecipes(isRefreshing = isRefreshing)
     }
+
+
     private fun refreshRecipes(isRefreshing: Boolean) {
         viewModelScope.launch {
             if (isRefreshing) {
@@ -88,19 +95,18 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
-
     // Function to update the query
     fun updateQuery(query: String) {
         _currentQuery.value = query
     }
-
     fun searchByLetter(letter: String){
         getByLetter(query = letter)
     }
+
     private fun getByLetter(query: String){
         viewModelScope.launch {
-            delay(500L)
             updateQuery(query = query)
+            delay(250L)
             query.replace(" ", "")
             if (
                 query.length == 1
@@ -108,7 +114,7 @@ class RecipeViewModel : ViewModel() {
                 && !query.matches("[^a-zA-Z0-9 ]".toRegex())
             ) {
                 try {
-                    val response = RetrofitInstance.api.getMealByFirstLetter(query)
+                    val response = repository.searchByLetter(letter = query)
                     if (response.isSuccessful) {
                         _recipes.value = response.body()?.meals ?: emptyList()
                         Log.i(TAG, "Api called: ${getCurrentDateTime()}")
@@ -156,8 +162,58 @@ class RecipeViewModel : ViewModel() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getCurrentDateTime(): String {
-        return LocalDateTime.now().format(ofLocalizedDateTime(FormatStyle.MEDIUM))
+
+    fun searchByName(name: String){
+        getByName(query = name)
+    }
+    private fun getByName(query: String){
+        viewModelScope.launch {
+            updateQuery(query = query)
+            delay(2500L)
+            if (
+                query.length > 1
+                && !query.contains(regex = "[0-9]+".toRegex())
+                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                try {
+                    val response = repository.searchByName(name = query)
+                    if (response.isSuccessful) {
+                        _recipes.value = response.body()?.meals ?: emptyList()
+                        Log.i(TAG, "Api called: ${getCurrentDateTime()}")
+                        _isError.value = false
+                        _isLoading.value = false
+                    } else {
+                        _isError.value = true
+                        _message.value = "Error Calling API for query $query : ${getCurrentDateTime()}"
+                        Log.e(TAG, _message.value)
+                    }
+                } catch (e: HttpException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } catch (e: SocketTimeoutException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } finally {
+                    _isLoading.value = false
+                }
+
+            } else if (
+                query.isBlank()
+            ) {
+                _isLoading.value = true
+                Log.e(TAG, "Error Calling API for empty blank query $query : ${getCurrentDateTime()}")
+            }else if (
+                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                _isError.value = true
+                _isLoading.value = false
+                _message.value = "Search Query: $query is not a Word"
+                Log.e(TAG, "Error Calling API for query $query : ${getCurrentDateTime()}")
+            } else {
+                _isError.value = false
+            }
+        }
     }
 }

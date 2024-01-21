@@ -6,7 +6,7 @@ import com.sd.palatecraft.remote.SearchMealByName
 import com.sd.palatecraft.response.RetrofitInstance
 import retrofit2.Response
 
-class RecipeRepository {
+class MainRepository {
     private val apiService = RetrofitInstance.api
 
     suspend fun getRandomRecipe(): Response<RandomMeal> {

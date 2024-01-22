@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.remote.Ingredients
 
-private const val TAG = "IngredientsList"
 @Composable
 fun IngredientItem(ingredient: Ingredients) {
     Box(

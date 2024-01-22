@@ -1,7 +1,6 @@
 package com.sd.palatecraft.presentation.screen
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,60 +25,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.sd.palatecraft.presentation.components.listitems.CategoryItem
-import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
-import com.sd.palatecraft.remote.Category
-import com.sd.palatecraft.response.RetrofitInstance
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.delay
-import retrofit2.HttpException
-import java.net.SocketTimeoutException
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
+import com.sd.palatecraft.MainViewModel
+import com.sd.palatecraft.presentation.components.listitems.CategoryItem
+import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
 
-private const val TAG = "CategoriesScreen"
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun CategoriesScreen(navigator: DestinationsNavigator) {
-    var categories by rememberSaveable { mutableStateOf<List<Category>>(emptyList()) }
-    var isLoading by rememberSaveable { mutableStateOf(true) }
-    var isError by rememberSaveable { mutableStateOf(false) }
-    var initialApiCalled by rememberSaveable { mutableStateOf(false) }
-    val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))
+fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
+    val categories by viewModel.categories.collectAsState(emptyList())
+    val isLoading by viewModel.isLoading.collectAsState(true)
+    val isError by viewModel.isError.collectAsState(false)
     LaunchedEffect(Unit) {
-        delay(3000L)
-        if (!initialApiCalled) {
-            try {
-                val response = RetrofitInstance.api.listCategories()
-                if (response.isSuccessful) {
-                    categories = response.body()?.categories ?: emptyList()
-                    Log.i(TAG, "API called: $dateTime")
-                } else {
-                    isError = true
-                }
-            } catch (e: HttpException) {
-                isError = true
-                Log.e(TAG, "Exception:${e.message} \n date: $dateTime")
-            }catch (e: SocketTimeoutException) {
-                isError = true
-                Log.e(TAG, "Exception:${e.message} \n date: $dateTime")
-            } finally {
-                isLoading = false
-                initialApiCalled = true
-            }
-        }
+        viewModel.listCategories()
     }
     if(isLoading){
         Box(

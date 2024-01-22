@@ -36,7 +36,6 @@ import com.sd.palatecraft.R
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.navdrawer.components.NavigationDrawer
 
-private const val TAG = "HomeScreen"
 @RequiresApi(Build.VERSION_CODES.O)
 @RootNavGraph(start = true)
 @Destination

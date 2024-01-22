@@ -5,6 +5,10 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sd.palatecraft.remote.Area
+import com.sd.palatecraft.remote.Category
+import com.sd.palatecraft.remote.FilteredMeals
+import com.sd.palatecraft.remote.Ingredients
 import com.sd.palatecraft.remote.Meal
 import com.sd.palatecraft.reposiory.MainRepository
 import com.sd.palatecraft.response.RetrofitInstance
@@ -26,6 +30,18 @@ class MainViewModel : ViewModel() {
 
     private val _recipes = MutableStateFlow<List<Meal>>(emptyList())
     val recipes: StateFlow<List<Meal>> = _recipes.asStateFlow()
+
+    private val _categories = MutableStateFlow<List<Category>>(emptyList())
+    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
+
+    private val _areas = MutableStateFlow<List<Area>>(emptyList())
+    val areas: StateFlow<List<Area>> = _areas.asStateFlow()
+
+    private val _ingredients = MutableStateFlow<List<Ingredients>>(emptyList())
+    val ingredients: StateFlow<List<Ingredients>> = _ingredients.asStateFlow()
+
+    private val _filteredMeals = MutableStateFlow<List<FilteredMeals>>(emptyList())
+    val filteredMeals: StateFlow<List<FilteredMeals>> = _filteredMeals.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -95,7 +111,6 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    // Function to update the query
     fun updateQuery(query: String) {
         _currentQuery.value = query
     }
@@ -179,6 +194,141 @@ class MainViewModel : ViewModel() {
                     val response = repository.searchByName(name = query)
                     if (response.isSuccessful) {
                         _recipes.value = response.body()?.meals ?: emptyList()
+                        Log.i(TAG, "Api called: ${getCurrentDateTime()}")
+                        _isError.value = false
+                        _isLoading.value = false
+                    } else {
+                        _isError.value = true
+                        _message.value = "Error Calling API for query $query : ${getCurrentDateTime()}"
+                        Log.e(TAG, _message.value)
+                    }
+                } catch (e: HttpException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } catch (e: SocketTimeoutException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } finally {
+                    _isLoading.value = false
+                }
+
+            } else if (
+                query.isBlank()
+            ) {
+                _isLoading.value = true
+                Log.e(TAG, "Error Calling API for empty blank query $query : ${getCurrentDateTime()}")
+            }else if (
+                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                _isError.value = true
+                _isLoading.value = false
+                _message.value = "Search Query: $query is not a Word"
+                Log.e(TAG, "Error Calling API for query $query : ${getCurrentDateTime()}")
+            } else {
+                _isError.value = false
+            }
+        }
+    }
+
+    fun listCategories(){
+        getCategories()
+    }
+    private fun getCategories(){
+        viewModelScope.launch {
+            delay(250L)
+            try {
+                val response = repository.getCategories()
+                if (response.isSuccessful) {
+                    _categories.value = response.body()?.categories ?: emptyList()
+                    Log.i(TAG, "API called: ${getCurrentDateTime()}")
+                } else {
+                    _isError.value = true
+                }
+            } catch (e: HttpException) {
+                _isError.value= true
+                Log.e(TAG, "Exception:${e.message} \n date: ${getCurrentDateTime()}")
+            }catch (e: SocketTimeoutException) {
+                _isError.value = true
+                Log.e(TAG, "Exception:${e.message} \n date: ${getCurrentDateTime()}")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun listAreas(){
+        getAreas()
+    }
+    private fun getAreas(){
+        viewModelScope.launch {
+            delay(250L)
+            try {
+                val response = repository.getAreas()
+                if (response.isSuccessful) {
+                    Log.i(TAG, "${response.body()}")
+                    _areas.value = response.body()?.meals ?: emptyList()
+                    Log.i(TAG, "$areas")
+                    Log.i(TAG, "API called: ${getCurrentDateTime()}")
+                } else {
+                    _isError.value = true
+                }
+            } catch (e: HttpException) {
+                _isError.value = true
+                Log.e(TAG, "Exception:${e.message} \n date: ${getCurrentDateTime()}")
+            }catch (e: SocketTimeoutException) {
+                _isError.value = true
+                Log.e(TAG, "Exception:${e.message} \n date: ${getCurrentDateTime()}")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun listIngredients() {
+        getIngredients()
+    }
+
+    private fun getIngredients(){
+        viewModelScope.launch {
+            try {
+                val response = repository.getIngredients()
+                if (response.isSuccessful) {
+                    _ingredients.value = response.body()?.meals ?: emptyList()
+                    Log.i(TAG, "API called: ${getCurrentDateTime()}")
+                } else {
+                    _isError.value = true
+                }
+            } catch (e: HttpException) {
+                _isError.value = true
+                Log.e(TAG, "Exception:${e.message} \n date: ${getCurrentDateTime()}")
+            }catch (e: SocketTimeoutException) {
+                _isError.value = true
+                Log.e(TAG, "Exception:${e.message} \n date: ${getCurrentDateTime()}")
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+
+    fun searchByCategory(category: String){
+        getByCategory(query = category)
+    }
+    private fun getByCategory(query: String) {
+        viewModelScope.launch {
+            updateQuery(query = query)
+            delay(250L)
+            if (
+                query.length > 1
+                && !query.contains(regex = "[0-9]+".toRegex())
+                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                try {
+                    val response = RetrofitInstance.api.filterByCategory(query)
+                    if (response.isSuccessful) {
+                        _filteredMeals.value = response.body()?.meals ?: emptyList()
                         Log.i(TAG, "Api called: ${getCurrentDateTime()}")
                         _isError.value = false
                         _isLoading.value = false

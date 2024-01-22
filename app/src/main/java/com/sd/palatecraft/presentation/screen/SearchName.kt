@@ -40,7 +40,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-private const val TAG = "SearchName"
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination

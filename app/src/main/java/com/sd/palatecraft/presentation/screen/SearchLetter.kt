@@ -34,19 +34,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sd.palatecraft.presentation.components.searchbar.SearchBar
 import com.sd.palatecraft.presentation.components.listitems.ThumbNailItem
-import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Destination
 @Composable
-fun SearchLetter(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
+fun SearchLetter(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val recipes by viewModel.recipes.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)

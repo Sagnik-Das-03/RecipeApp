@@ -36,16 +36,17 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.FilterCategoryItem
 import com.sd.palatecraft.presentation.components.searchbar.SearchBar
-import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun FilterCategoryScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
+fun FilterCategoryScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val filteredMeals by viewModel.filteredMeals.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)

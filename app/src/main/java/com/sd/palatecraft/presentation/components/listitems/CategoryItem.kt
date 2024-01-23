@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sd.palatecraft.presentation.screen.destinations.CategoryDetailsScreenDestination
-import com.sd.palatecraft.remote.Category
+import com.sd.palatecraft.presentation.destinations.CategoryDetailsScreenDestination
+import com.sd.palatecraft.data.remote.Category
 
 @Composable
 fun CategoryItem(category: Category, navigator: DestinationsNavigator) {
@@ -54,7 +54,9 @@ fun CategoryItem(category: Category, navigator: DestinationsNavigator) {
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.onPrimary
                     ),
-                    modifier = Modifier.weight(0.35f), onClick = { navigator.navigate(CategoryDetailsScreenDestination(category = category.strCategory))}) {
+                    modifier = Modifier.weight(0.35f), onClick = { navigator.navigate(
+                        CategoryDetailsScreenDestination(category = category.strCategory)
+                    )}) {
                     Icon(imageVector = Icons.Filled.ArrowForward,
                         contentDescription = "Go to Category",
                         tint = MaterialTheme.colorScheme.onPrimaryContainer)

@@ -55,7 +55,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.R
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
-import com.sd.palatecraft.remote.Meal
+import com.sd.palatecraft.data.remote.Meal
 import com.sd.palatecraft.ui.theme.Black40
 import com.sd.palatecraft.ui.theme.BlackA40
 import com.sd.palatecraft.ui.theme.BlackA60

@@ -1,4 +1,4 @@
-package com.sd.palatecraft.presentation.screen.detailscreen
+package com.sd.palatecraft.presentation.detailscreen
 
 import androidx.compose.runtime.Composable
 import com.ramcosta.composedestinations.annotation.Destination

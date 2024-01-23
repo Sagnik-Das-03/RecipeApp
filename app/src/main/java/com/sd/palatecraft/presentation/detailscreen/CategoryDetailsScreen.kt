@@ -1,9 +1,8 @@
-package com.sd.palatecraft.presentation.screen
+package com.sd.palatecraft.presentation.detailscreen
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,11 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyHorizontalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -29,25 +29,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
-import com.sd.palatecraft.presentation.components.listitems.AreasItem
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import com.sd.palatecraft.presentation.destinations.CategoriesScreenDestination
+import com.sd.palatecraft.presentation.detailscreen.details_screen_item.CategoryDetailsItem
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
-    val areas by viewModel.areas.collectAsState(emptyList())
+fun CategoryDetailsScreen(
+    category: String, navigator: DestinationsNavigator,
+    viewModel: MainViewModel = getViewModel(),
+) {
+    val filteredMeals by viewModel.filteredMeals.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)
+    val message by viewModel.message.collectAsState("")
     LaunchedEffect(Unit) {
-        viewModel.listAreas()
+        viewModel.searchByCategory(category)
     }
     if(isLoading){
         Box(
@@ -58,7 +60,7 @@ fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = get
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Loading Areas",
+                    text = "Loading Category",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -73,39 +75,30 @@ fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = get
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxSize()
         ){
-            Text(text = "Error Fetching Data")
+            Text(text = message)
         }
-    }else {
+    } else {
         Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
+            Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary)
-            ) {
-                FilledTonalButton(
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                    onClick = { navigator.navigate(RecipeScreenDestination) }) {
-                    Icon(
-                        imageVector = Icons.Filled.Home,
-                        contentDescription = "Back to Home")
+                    .background(MaterialTheme.colorScheme.primary)) {
+                Spacer(modifier = Modifier.width(18.dp))
+                FilledTonalIconButton( modifier = Modifier.weight(0.15f),onClick = { navigator.navigate(
+                    CategoriesScreenDestination
+                ) }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back To List of Categories")
                 }
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(
-                    text = "List of Cuisines",
-                    textAlign = TextAlign.Center,
-                    fontFamily = FontFamily.Cursive,
-                    style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(vertical = 10.dp))
+                Spacer(modifier = Modifier.width(18.dp))
+                Text(text = "List of Dishes", color = MaterialTheme.colorScheme.onPrimary, fontFamily = FontFamily.Cursive, style = MaterialTheme.typography.displaySmall, modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .weight(0.75f))
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn{
+            LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Fixed(2)){
                 items(
-                    items = areas
-                ){area->
-                    AreasItem(area = area)
+                    items = filteredMeals
+                ){meal ->
+                    CategoryDetailsItem(meal = meal)
                 }
             }
         }

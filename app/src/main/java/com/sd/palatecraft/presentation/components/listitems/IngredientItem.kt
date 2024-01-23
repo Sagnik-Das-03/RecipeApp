@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.sd.palatecraft.remote.Ingredients
+import com.sd.palatecraft.data.remote.Ingredients
 
 @Composable
 fun IngredientItem(ingredient: Ingredients) {

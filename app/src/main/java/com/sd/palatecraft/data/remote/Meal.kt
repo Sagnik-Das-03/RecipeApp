@@ -1,4 +1,4 @@
-package com.sd.palatecraft.remote
+package com.sd.palatecraft.data.remote
 
 data class Meal(
     val dateModified: Any,

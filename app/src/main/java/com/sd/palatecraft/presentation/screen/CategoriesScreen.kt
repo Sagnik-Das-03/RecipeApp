@@ -37,12 +37,13 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.CategoryItem
-import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
+import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
+fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
     val categories by viewModel.categories.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)

@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.sd.palatecraft.remote.FilteredMeals
+import com.sd.palatecraft.data.remote.FilteredMeals
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable

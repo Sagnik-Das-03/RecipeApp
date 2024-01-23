@@ -36,12 +36,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.IngredientItem
-import com.sd.palatecraft.presentation.screen.destinations.RecipeScreenDestination
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import org.koin.androidx.compose.getViewModel
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = viewModel()) {
+fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
     val ingredients by viewModel.ingredients.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)

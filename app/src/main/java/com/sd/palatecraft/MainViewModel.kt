@@ -5,14 +5,13 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sd.palatecraft.remote.Area
-import com.sd.palatecraft.remote.Category
-import com.sd.palatecraft.remote.FilteredMeals
-import com.sd.palatecraft.remote.Ingredients
-import com.sd.palatecraft.remote.Meal
-import com.sd.palatecraft.reposiory.MainRepository
-import com.sd.palatecraft.response.RetrofitInstance
-import kotlinx.coroutines.Delay
+import com.sd.palatecraft.data.remote.Area
+import com.sd.palatecraft.data.remote.Category
+import com.sd.palatecraft.data.remote.FilteredMeals
+import com.sd.palatecraft.data.remote.Ingredients
+import com.sd.palatecraft.data.remote.Meal
+import com.sd.palatecraft.data.reposiory.MainRepository
+import com.sd.palatecraft.data.reposiory.Repository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,8 +24,9 @@ import java.time.format.DateTimeFormatter.ofLocalizedDateTime
 import java.time.format.FormatStyle
 private const val TAG = "RecipeViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
-class MainViewModel : ViewModel() {
-    private val repository = MainRepository()
+class MainViewModel(
+    private val repository: Repository
+) : ViewModel() {
 
     private val _recipes = MutableStateFlow<List<Meal>>(emptyList())
     val recipes: StateFlow<List<Meal>> = _recipes.asStateFlow()
@@ -66,7 +66,7 @@ class MainViewModel : ViewModel() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchRandomRecipes() {
         viewModelScope.launch {
-            delay(2500L)
+            delay(1500L)
             try {
                 val response = repository.getRandomRecipe()
                 if (response.isSuccessful) {
@@ -74,12 +74,17 @@ class MainViewModel : ViewModel() {
                     Log.i(TAG, "API called: ${getCurrentDateTime()}")
                 } else {
                     _isError.value = true
+                    _message.value = "Check Internet Connection"
                 }
-            } catch (e: HttpException) {
+            }catch (e: HttpException) {
                 _isError.value = true
                 Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
             } catch (e: SocketTimeoutException) {
                 _isError.value = true
+                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+            }catch (e: Exception) {
+                _isError.value = true
+                _message.value = "${e.message}"
                 Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
             } finally {
                 _isLoading.value = false
@@ -101,9 +106,16 @@ class MainViewModel : ViewModel() {
                     } else {
                         _isError.value = true
                     }
-                } catch (e: HttpException) {
+                }catch (e: HttpException) {
                     _isError.value = true
-                    print(e.printStackTrace())
+                    Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+                } catch (e: SocketTimeoutException) {
+                    _isError.value = true
+                    Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+                }catch (e: Exception) {
+                    _isError.value = true
+                    _message.value = "${e.message}"
+                    Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
                 } finally {
                     _isLoading.value = false
                 }
@@ -187,8 +199,6 @@ class MainViewModel : ViewModel() {
             delay(2500L)
             if (
                 query.length > 1
-                && !query.contains(regex = "[0-9]+".toRegex())
-                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
             ) {
                 try {
                     val response = repository.searchByName(name = query)
@@ -219,13 +229,6 @@ class MainViewModel : ViewModel() {
             ) {
                 _isLoading.value = true
                 Log.e(TAG, "Error Calling API for empty blank query $query : ${getCurrentDateTime()}")
-            }else if (
-                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
-            ) {
-                _isError.value = true
-                _isLoading.value = false
-                _message.value = "Search Query: $query is not a Word"
-                Log.e(TAG, "Error Calling API for query $query : ${getCurrentDateTime()}")
             } else {
                 _isError.value = false
             }
@@ -326,7 +329,7 @@ class MainViewModel : ViewModel() {
                 && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
             ) {
                 try {
-                    val response = RetrofitInstance.api.filterByCategory(query)
+                    val response =repository.filterByCategory(category = query)
                     if (response.isSuccessful) {
                         _filteredMeals.value = response.body()?.meals ?: emptyList()
                         Log.i(TAG, "Api called: ${getCurrentDateTime()}")
@@ -363,6 +366,38 @@ class MainViewModel : ViewModel() {
                 Log.e(TAG, "Error Calling API for query $query : ${getCurrentDateTime()}")
             } else {
                 _isError.value = false
+            }
+        }
+    }
+
+
+    fun searchById(id: String){
+        getById(id = id)
+    }
+    private fun getById(id: String){
+        viewModelScope.launch {
+            delay(1500L)
+            try {
+                val response = repository.searchById(id)
+                if (response.isSuccessful) {
+                    _recipes.value = response.body()?.meals ?: emptyList()
+                    Log.i(TAG, "API called: ${getCurrentDateTime()}")
+                } else {
+                    _isError.value = true
+                    _message.value = "Check Internet Connection"
+                }
+            }catch (e: HttpException) {
+                _isError.value = true
+                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+            } catch (e: SocketTimeoutException) {
+                _isError.value = true
+                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+            }catch (e: Exception) {
+                _isError.value = true
+                _message.value = "${e.message}"
+                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+            } finally {
+                _isLoading.value = false
             }
         }
     }

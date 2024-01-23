@@ -21,13 +21,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import com.sd.palatecraft.MainViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SearchBar(
     label: String,
-    viewModel:MainViewModel = viewModel(),
-    onSearchQueryChanged: (String) -> Unit, onClearClicked: () -> Unit) {
+    viewModel: MainViewModel = getViewModel(),
+    onSearchQueryChanged: (String) -> Unit, onClearClicked: () -> Unit,
+) {
     val currentQuery by viewModel.currentQuery.collectAsState()
 
     OutlinedTextField(

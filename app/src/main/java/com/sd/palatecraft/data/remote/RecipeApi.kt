@@ -1,4 +1,4 @@
-package com.sd.palatecraft.remote
+package com.sd.palatecraft.data.remote
 
 import retrofit2.Response
 import retrofit2.http.GET
@@ -8,6 +8,10 @@ interface RecipeApi  {
     //https://www.themealdb.com/api/json/v1/1/random.php
     @GET("random.php")
     suspend fun getRandomRecipe() : Response<RandomMeal>
+
+    //https://www.themealdb.com/api/json/v1/1/lookup.php?i=52772
+    @GET("lookup.php")
+    suspend fun getById(@Query("i") id: String): Response<SearchMealById>
 
     //https://www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
     @GET("search.php")

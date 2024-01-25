@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -23,33 +25,39 @@ import com.sd.palatecraft.data.remote.dto.Area
 
 @Composable
 fun AreasItem(area: Area) {
-    Box(
+    Card(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        ),
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
+            .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(10.dp)
             )
     ){
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary.copy(0.5f))) {
             Text(
                 text = area.strArea,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
-                    .padding(vertical = 24.dp, horizontal = 16.dp)
-                    .weight(0.8f))
+                    .padding(vertical = 32.dp, horizontal = 16.dp)
+                    .weight(0.6f))
             FilledTonalIconButton(
-                colors = IconButtonDefaults.iconButtonColors(containerColor = MaterialTheme.colorScheme.onPrimary),
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
+                    contentColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
                 modifier = Modifier
                     .padding(8.dp)
-                    .weight(0.2f),
+                    .weight(0.4f),
                 onClick = { /*TODO*/ }) {
                 Icon(
                     imageVector = Icons.Outlined.ArrowForward,
                     contentDescription = "Go to Cuisine",
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(18.dp))
             }
         }

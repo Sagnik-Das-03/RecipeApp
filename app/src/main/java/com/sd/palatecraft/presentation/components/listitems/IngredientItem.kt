@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowForward
+import androidx.compose.material3.Card
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButtonDefaults
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -27,17 +29,17 @@ import com.sd.palatecraft.presentation.destinations.IngredientDetailsScreenDesti
 
 @Composable
 fun IngredientItem(ingredient: Ingredients, navigator: DestinationsNavigator) {
-    Box(
-        contentAlignment = Alignment.TopStart,
+    Card(
         modifier = Modifier
             .padding(10.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.onSecondary,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
         Column(
             modifier = Modifier
+                .background(color = MaterialTheme.colorScheme.onSecondary.copy(0.5f))
                 .padding(vertical = 16.dp, horizontal = 12.dp)
         ) {
             Row(
@@ -50,15 +52,15 @@ fun IngredientItem(ingredient: Ingredients, navigator: DestinationsNavigator) {
                 )
                 FilledTonalIconButton(
                     onClick = { navigator.navigate(IngredientDetailsScreenDestination(ingredientName = ingredient.strIngredient)) },
-                    modifier = Modifier.weight(0.3f),
+                    modifier = Modifier.scale(0.8f).weight(0.4f),
                     colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = MaterialTheme.colorScheme.onPrimary
+                        containerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
+                        contentColor = MaterialTheme.colorScheme.secondaryContainer
                     )
                 ) {
                     Icon(imageVector = Icons.Outlined.ArrowForward,
                         contentDescription = "Go to Button",
-                        modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                        modifier = Modifier.size(18.dp))
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))

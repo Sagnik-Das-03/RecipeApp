@@ -1,5 +1,6 @@
 package com.sd.palatecraft.presentation.components.listitems
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -45,7 +46,7 @@ fun FilterItem(navigator: DestinationsNavigator, filteredMeal: FilteredMeals) {
         ),
         modifier = Modifier
             .padding(vertical = 16.dp, horizontal = 8.dp)
-            .widthIn(min= (width*0.65).dp, max = (width*0.85).dp)
+            .widthIn(min = (width * 0.65).dp, max = (width * 0.85).dp)
             .background(
                 color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(16.dp)

@@ -3,6 +3,9 @@ package com.sd.palatecraft.presentation.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +33,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.FilterItem
 import com.sd.palatecraft.presentation.components.searchbar.TopFilterSearchBar
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,19 +49,21 @@ fun FilterAreaScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
     val currentQuery by viewModel.currentQuery.collectAsState()
     Scaffold(
         topBar = {
-            TopFilterSearchBar(
-                coroutineScope = coroutineScope,
-                navigator = navigator,
-                viewModel = viewModel,
-                currentQuery = currentQuery,
-                isError = isError,
-                isLoading = isLoading,
-                filteredMealsList = filteredMeals,
-                label = "Search by Area",
-                searchFunction = {
-                    searchByArea(area = currentQuery)
-                }
-            )
+            WithAnimation(animation = fadeIn() + expandHorizontally(), delay = 500) {
+                TopFilterSearchBar(
+                    coroutineScope = coroutineScope,
+                    navigator = navigator,
+                    viewModel = viewModel,
+                    currentQuery = currentQuery,
+                    isError = isError,
+                    isLoading = isLoading,
+                    filteredMealsList = filteredMeals,
+                    label = "Search by Area",
+                    searchFunction = {
+                        searchByArea(area = currentQuery)
+                    }
+                )
+            }
         }
     ){
         if (isLoading || currentQuery.isBlank()) {
@@ -67,7 +73,7 @@ fun FilterAreaScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Search for a Category",
+                        text = "Search for a Area",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -98,7 +104,9 @@ fun FilterAreaScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                items(
                    items = filteredMeals
                ){ filteredMeal->
-                   FilterItem(navigator = navigator, filteredMeal = filteredMeal)
+                   WithAnimation(animation = slideInHorizontally()+ fadeIn(), delay = 250) {
+                       FilterItem(navigator = navigator, filteredMeal = filteredMeal)
+                   }
                }
            }
         }

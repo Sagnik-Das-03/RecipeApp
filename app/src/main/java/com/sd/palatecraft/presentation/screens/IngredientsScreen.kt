@@ -2,6 +2,8 @@ package com.sd.palatecraft.presentation.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +39,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.IngredientItem
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -82,7 +85,7 @@ fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(color = MaterialTheme.colorScheme.onSecondary)
             ) {
                 FilledTonalButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -98,19 +101,23 @@ fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel
                     textAlign = TextAlign.Center,
                     fontFamily = FontFamily.Cursive,
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(vertical = 10.dp)
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(count = 2)){
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(count = 2),
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary)
+            ){
                 items(
                     items = ingredients,
                     key = { ingredient->
                         ingredient.idIngredient
                     }
                 ){ingredient->
-                    IngredientItem(ingredient = ingredient, navigator= navigator)
+                    WithAnimation(animation = slideInVertically()+ fadeIn(), delay = 150) {
+                        IngredientItem(ingredient = ingredient, navigator= navigator)
+                    }
                 }
             }
         }

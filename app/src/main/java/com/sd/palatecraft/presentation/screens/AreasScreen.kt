@@ -2,6 +2,8 @@ package com.sd.palatecraft.presentation.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.FilledTonalButton
@@ -36,6 +41,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.AreasItem
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -81,7 +87,7 @@ fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = get
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(color = MaterialTheme.colorScheme.onSecondary)
             ) {
                 FilledTonalButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -90,21 +96,23 @@ fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = get
                         imageVector = Icons.Filled.Home,
                         contentDescription = "Back to Home")
                 }
-                Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "List of Cuisines",
+                    text = "List of Area",
                     textAlign = TextAlign.Center,
                     fontFamily = FontFamily.Cursive,
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(vertical = 10.dp))
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 16.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn{
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Fixed(2),
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary)){
                 items(
                     items = areas
                 ){area->
-                    AreasItem(area = area)
+                    WithAnimation(animation = expandVertically()+ fadeIn(), delay = 25) {
+                        AreasItem(area = area)
+                    }
                 }
             }
         }

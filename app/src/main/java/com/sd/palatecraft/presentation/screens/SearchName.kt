@@ -3,6 +3,9 @@ package com.sd.palatecraft.presentation.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +30,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.ThumbNailItem
 import com.sd.palatecraft.presentation.components.searchbar.TopSearchBar
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -42,19 +46,21 @@ fun SearchName(navigator: DestinationsNavigator, viewModel: MainViewModel = getV
     val currentQuery by viewModel.currentQuery.collectAsState()
     Scaffold(
         topBar = {
-            TopSearchBar(
-                coroutineScope = coroutineScope,
-                navigator = navigator,
-                viewModel = viewModel,
-                currentQuery = currentQuery,
-                isError = isError,
-                isLoading = isLoading,
-                recipes = recipes,
-                label = "Search by Name",
-                searchFunction = {
-                    searchByName(name = currentQuery)
-                }
-            )
+            WithAnimation(animation = fadeIn()+ expandHorizontally(), delay = 500) {
+                TopSearchBar(
+                    coroutineScope = coroutineScope,
+                    navigator = navigator,
+                    viewModel = viewModel,
+                    currentQuery = currentQuery,
+                    isError = isError,
+                    isLoading = isLoading,
+                    recipes = recipes,
+                    label = "Search by Name",
+                    searchFunction = {
+                        searchByName(name = currentQuery)
+                    }
+                )
+            }
         }
     ) {
         if (isLoading || currentQuery.isBlank()) {
@@ -92,7 +98,9 @@ fun SearchName(navigator: DestinationsNavigator, viewModel: MainViewModel = getV
                 items(
                     items = recipes
                 ) { recipe ->
-                    ThumbNailItem(recipe = recipe)
+                    WithAnimation(animation = slideInHorizontally() + fadeIn(), delay = 250) {
+                        ThumbNailItem(recipe = recipe)
+                    }
                 }
             }
         }

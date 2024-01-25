@@ -3,6 +3,13 @@ package com.sd.palatecraft.presentation.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +34,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.searchbar.TopSearchBar
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -43,19 +51,21 @@ fun SearchLetter(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
     Scaffold(
         containerColor = MaterialTheme.colorScheme.onSecondary,
         topBar = {
-            TopSearchBar(
-                coroutineScope = coroutineScope,
-                navigator = navigator,
-                viewModel = viewModel,
-                currentQuery = currentQuery,
-                isError = isError,
-                isLoading = isLoading,
-                recipes = recipes,
-                label = "Search By Letter",
-                searchFunction = {
-                    searchByLetter(letter = currentQuery)
-                }
-            )
+            WithAnimation(animation = fadeIn()+ expandHorizontally(), delay = 500) {
+                TopSearchBar(
+                    coroutineScope = coroutineScope,
+                    navigator = navigator,
+                    viewModel = viewModel,
+                    currentQuery = currentQuery,
+                    isError = isError,
+                    isLoading = isLoading,
+                    recipes = recipes,
+                    label = "Search By Letter",
+                    searchFunction = {
+                        searchByLetter(letter = currentQuery)
+                    }
+                )
+            }
         }
     ) {
         if (isLoading || currentQuery.isBlank()) {
@@ -65,7 +75,7 @@ fun SearchLetter(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Search for a Recipe",
+                        text = "Search for a Letter",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -94,7 +104,9 @@ fun SearchLetter(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                     items = recipes
 
                 ) { recipe ->
-                    ThumbNailItem(recipe = recipe)
+                   WithAnimation(animation = slideInHorizontally() + fadeIn(), delay = 250) {
+                       ThumbNailItem(recipe = recipe)
+                   }
                 }
             }
         }

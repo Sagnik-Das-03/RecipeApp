@@ -3,6 +3,9 @@ package com.sd.palatecraft.presentation.screens
 import android.annotation.SuppressLint
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +33,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.FilterItem
 import com.sd.palatecraft.presentation.components.searchbar.TopFilterSearchBar
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -45,19 +49,21 @@ fun FilterCategoryScreen(navigator: DestinationsNavigator, viewModel: MainViewMo
     val currentQuery by viewModel.currentQuery.collectAsState()
     Scaffold(
         topBar = {
-            TopFilterSearchBar(
-                coroutineScope = coroutineScope,
-                navigator = navigator,
-                viewModel = viewModel,
-                currentQuery = currentQuery,
-                isError = isError,
-                isLoading = isLoading,
-                filteredMealsList = filteredMeals,
-                label = "Search for a Category",
-                searchFunction = {
-                    searchByCategory(category = currentQuery)
-                }
-            )
+            WithAnimation(animation = fadeIn() + expandHorizontally(), delay = 500) {
+                TopFilterSearchBar(
+                    coroutineScope = coroutineScope,
+                    navigator = navigator,
+                    viewModel = viewModel,
+                    currentQuery = currentQuery,
+                    isError = isError,
+                    isLoading = isLoading,
+                    filteredMealsList = filteredMeals,
+                    label = "Search for a Category",
+                    searchFunction = {
+                        searchByCategory(category = currentQuery)
+                    }
+                )
+            }
         }
     ){
         if (isLoading || currentQuery.isBlank()) {
@@ -98,7 +104,9 @@ fun FilterCategoryScreen(navigator: DestinationsNavigator, viewModel: MainViewMo
                 items(
                     items = filteredMeals
                 ){ filteredMeal->
-                    FilterItem(navigator = navigator, filteredMeal = filteredMeal)
+                    WithAnimation(animation = slideInHorizontally()+ fadeIn(), delay = 250) {
+                        FilterItem(navigator = navigator, filteredMeal = filteredMeal)
+                    }
                 }
             }
         }

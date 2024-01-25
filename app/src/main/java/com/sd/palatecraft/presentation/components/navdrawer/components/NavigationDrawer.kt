@@ -1,6 +1,8 @@
 package com.sd.palatecraft.presentation.components.navdrawer.components
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -55,6 +57,7 @@ import com.sd.palatecraft.data.remote.dto.Meal
 import com.sd.palatecraft.presentation.destinations.FilterAreaScreenDestination
 import com.sd.palatecraft.presentation.destinations.FilterIngredientScreenDestination
 import com.sd.palatecraft.ui.theme.BlackA60
+import com.sd.palatecraft.util.WithAnimation
 import com.sd.palatecraft.util.navItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -199,9 +202,11 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                 )
             }
         ) {
-            LazyColumn{
-                items(recipes) { recipe ->
-                    RecipeItem(recipe)
+            WithAnimation(animation = fadeIn()+ slideInVertically(), delay = 50) {
+                LazyColumn{
+                    items(recipes) { recipe ->
+                        RecipeItem(recipe)
+                    }
                 }
             }
         }

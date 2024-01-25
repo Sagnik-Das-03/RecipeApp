@@ -2,6 +2,8 @@ package com.sd.palatecraft.presentation.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +40,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.CategoryItem
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import com.sd.palatecraft.util.WithAnimation
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -99,7 +102,7 @@ fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                     fontFamily = FontFamily.Cursive,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.secondary,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
+                    modifier = Modifier.padding(top = 16.dp, bottom = 16.dp))
             }
             LazyVerticalStaggeredGrid(
                 contentPadding = PaddingValues(4.dp),
@@ -108,7 +111,9 @@ fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                 items(
                     items = categories
                 ){category->
-                    CategoryItem(category = category, navigator = navigator)
+                    WithAnimation(animation = slideInVertically() + fadeIn(), delay = 150){
+                        CategoryItem(category = category, navigator = navigator)
+                    }
                 }
             }
         }

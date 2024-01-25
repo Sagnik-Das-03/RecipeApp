@@ -62,5 +62,15 @@ val navItems = listOf(
         title = "Filter By Category",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
+    ),
+    NavigationItem(
+        title = "Filter By Area",
+        selectedIcon = Icons.Filled.Search,
+        unselectedIcon = Icons.Outlined.Search,
+    ),
+    NavigationItem(
+        title = "Filter By Ingredient",
+        selectedIcon = Icons.Filled.Search,
+        unselectedIcon = Icons.Outlined.Search,
     )
 )

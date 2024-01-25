@@ -1,4 +1,4 @@
-package com.sd.palatecraft.presentation.screen
+package com.sd.palatecraft.presentation.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,9 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.FilledTonalButton
@@ -32,23 +31,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
-import com.sd.palatecraft.presentation.components.listitems.CategoryItem
+import com.sd.palatecraft.presentation.components.listitems.AreasItem
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
-    val categories by viewModel.categories.collectAsState(emptyList())
+fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
+    val areas by viewModel.areas.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)
     LaunchedEffect(Unit) {
-        viewModel.listCategories()
+        viewModel.listAreas()
     }
     if(isLoading){
         Box(
@@ -59,7 +57,7 @@ fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Loading Categories",
+                    text = "Loading Areas",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -94,20 +92,22 @@ fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "List of Categories",
+                    text = "List of Cuisines",
                     textAlign = TextAlign.Center,
                     fontFamily = FontFamily.Cursive,
                     style = MaterialTheme.typography.displaySmall,
                     color = MaterialTheme.colorScheme.onTertiary,
                     modifier = Modifier.padding(vertical = 10.dp))
             }
-            LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(count = 2)){
+            Spacer(modifier = Modifier.height(8.dp))
+            LazyColumn{
                 items(
-                    items = categories
-                ){category->
-                    CategoryItem(category = category, navigator = navigator)
+                    items = areas
+                ){area->
+                    AreasItem(area = area)
                 }
             }
         }
     }
 }
+

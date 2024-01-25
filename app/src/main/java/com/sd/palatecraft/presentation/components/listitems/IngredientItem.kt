@@ -21,10 +21,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.sd.palatecraft.data.remote.Ingredients
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sd.palatecraft.data.remote.dto.Ingredients
+import com.sd.palatecraft.presentation.destinations.IngredientDetailsScreenDestination
 
 @Composable
-fun IngredientItem(ingredient: Ingredients) {
+fun IngredientItem(ingredient: Ingredients, navigator: DestinationsNavigator) {
     Box(
         contentAlignment = Alignment.TopStart,
         modifier = Modifier
@@ -47,7 +49,7 @@ fun IngredientItem(ingredient: Ingredients) {
                     modifier = Modifier.weight(0.6f)
                 )
                 FilledTonalIconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navigator.navigate(IngredientDetailsScreenDestination(ingredientName = ingredient.strIngredient)) },
                     modifier = Modifier.weight(0.3f),
                     colors = IconButtonDefaults.filledIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.onPrimary

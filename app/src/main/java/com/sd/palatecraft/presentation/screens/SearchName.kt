@@ -1,4 +1,4 @@
-package com.sd.palatecraft.presentation.screen
+package com.sd.palatecraft.presentation.screens
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -6,19 +6,11 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -34,11 +26,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.ThumbNailItem
-import com.sd.palatecraft.presentation.components.searchbar.SearchBar
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import com.sd.palatecraft.presentation.components.searchbar.TopSearchBar
 import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -54,57 +42,19 @@ fun SearchName(navigator: DestinationsNavigator, viewModel: MainViewModel = getV
     val currentQuery by viewModel.currentQuery.collectAsState()
     Scaffold(
         topBar = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.padding(top = 16.dp, start = 18.dp, end = 8.dp, bottom = 10.dp)
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    FilledTonalButton(
-                        onClick = {
-                            coroutineScope.launch {
-                                delay(500L)
-                                navigator.navigate(RecipeScreenDestination)
-                            }
-                        }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Home,
-                            contentDescription = "Back to Home",
-                            modifier = Modifier
-                                .size(18.dp)
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(3.dp))
-                    if(currentQuery.isEmpty()){
-                        Text(text = "",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.secondary)
-                    }else if(currentQuery.isNotEmpty() && isError){
-                        Text(text = "Invalid Letter",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.error)
-                    }else if(!isLoading && currentQuery.isNotEmpty()){
-                        Text(
-                            text = "Results: ${recipes.size}",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.primary)
-                    }
+            TopSearchBar(
+                coroutineScope = coroutineScope,
+                navigator = navigator,
+                viewModel = viewModel,
+                currentQuery = currentQuery,
+                isError = isError,
+                isLoading = isLoading,
+                recipes = recipes,
+                label = "Search by Name",
+                searchFunction = {
+                    searchByName(name = currentQuery)
                 }
-                Spacer(modifier = Modifier.width(10.dp))
-                SearchBar(
-                    label = "Search by Name",
-                    onClearClicked = { viewModel.updateQuery("") },
-                    onSearchQueryChanged = { query ->
-                        coroutineScope.launch {
-                            viewModel.searchByName(query)
-                        }
-                    }
-                )
-            }
+            )
         }
     ) {
         if (isLoading || currentQuery.isBlank()) {

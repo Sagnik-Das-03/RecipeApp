@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
 import com.sd.palatecraft.presentation.components.ThumbNail
-import com.sd.palatecraft.data.remote.Meal
+import com.sd.palatecraft.data.remote.dto.Meal
 
 @Composable
 fun RecipeItem(recipe: Meal) {

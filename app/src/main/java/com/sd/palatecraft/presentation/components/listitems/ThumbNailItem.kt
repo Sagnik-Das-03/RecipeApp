@@ -1,17 +1,12 @@
 package com.sd.palatecraft.presentation.components.listitems
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -22,6 +17,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
@@ -45,13 +42,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
-import com.sd.palatecraft.data.remote.Meal
-import com.sd.palatecraft.ui.theme.WhiteA90
+import com.sd.palatecraft.data.remote.dto.Meal
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,28 +55,26 @@ fun ThumbNailItem(recipe: Meal) {
     val scrollState = rememberScrollState()
     val width = LocalConfiguration.current.screenWidthDp
     val lifecycleOwner = LocalLifecycleOwner.current
-    Box(
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
         modifier = Modifier
-            .fillMaxSize()
             .background(MaterialTheme.colorScheme.onSecondary)
-            .padding(top = 120.dp, start = 15.dp, end = 0.dp, bottom = 80.dp),
-        contentAlignment = Alignment.TopCenter
+            .padding(top = 140.dp, start = 16.dp, end = 8.dp, bottom = 60.dp),
     ) {
         Column(
             verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             modifier = Modifier
                 .background(
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f),
+                    color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.5f),
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(PaddingValues(start = 20.dp, end = 20.dp, top = 50.dp, bottom = 50.dp))
+                .padding(PaddingValues(start = 15.dp, end = 10.dp, top = 20.dp, bottom = 20.dp))
         ) {
             Spacer(modifier = Modifier.size(30.dp))
             AsyncImage(
                 model = recipe.strMealThumb, contentDescription = "RecipeImg",
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
+                modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
             )
             Spacer(modifier = Modifier.size(10.dp))
             Text(
@@ -92,10 +85,10 @@ fun ThumbNailItem(recipe: Meal) {
                 fontFamily = FontFamily.SansSerif,
                 lineHeight = 35.sp,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
                 modifier = Modifier.widthIn(
-                    min= ((width*0.7).toInt().dp),
-                    max = ((width*0.9).toInt().dp))
+                    min= ((width*0.65).toInt().dp),
+                    max = ((width*0.75).toInt().dp))
             )
             Spacer(modifier = Modifier.size(15.dp))
             Column {
@@ -119,8 +112,8 @@ fun ThumbNailItem(recipe: Meal) {
             Spacer(modifier = Modifier.size(10.dp))
             FilledTonalButton(
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
+                    contentColor = MaterialTheme.colorScheme.secondaryContainer
                 ),
                 onClick = { isSheetOpen = true }) {
                 Text(

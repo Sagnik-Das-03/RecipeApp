@@ -1,4 +1,4 @@
-package com.sd.palatecraft.presentation.screen
+package com.sd.palatecraft.presentation.screens
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,20 +36,19 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
-import com.sd.palatecraft.presentation.components.listitems.IngredientItem
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.sd.palatecraft.presentation.components.listitems.CategoryItem
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
-    val ingredients by viewModel.ingredients.collectAsState(emptyList())
+fun CategoriesScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = getViewModel()) {
+    val categories by viewModel.categories.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)
     LaunchedEffect(Unit) {
-        viewModel.listIngredients()
+        viewModel.listCategories()
     }
     if(isLoading){
         Box(
@@ -59,7 +59,7 @@ fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Loading Areas",
+                    text = "Loading Categories",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -83,35 +83,32 @@ fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel
                 horizontalArrangement = Arrangement.Start,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary)
+                    .background(color = MaterialTheme.colorScheme.onSecondary)
             ) {
                 FilledTonalButton(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     onClick = { navigator.navigate(RecipeScreenDestination) }) {
                     Icon(
                         imageVector = Icons.Filled.Home,
-                        contentDescription = "Back to Home"
-                    )
+                        contentDescription = "Back to Home")
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Text(
-                    text = "List of Ingredients",
+                    text = "List of Categories",
                     textAlign = TextAlign.Center,
                     fontFamily = FontFamily.Cursive,
                     style = MaterialTheme.typography.displaySmall,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.padding(vertical = 10.dp)
-                )
+                    color = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.padding(top = 16.dp, bottom = 32.dp))
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            LazyVerticalStaggeredGrid(columns = StaggeredGridCells.Fixed(count = 2)){
+            LazyVerticalStaggeredGrid(
+                contentPadding = PaddingValues(4.dp),
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary),
+                columns = StaggeredGridCells.Fixed(count = 2)){
                 items(
-                    items = ingredients,
-                    key = { ingredient->
-                        ingredient.idIngredient
-                    }
-                ){ingredient->
-                    IngredientItem(ingredient = ingredient)
+                    items = categories
+                ){category->
+                    CategoryItem(category = category, navigator = navigator)
                 }
             }
         }

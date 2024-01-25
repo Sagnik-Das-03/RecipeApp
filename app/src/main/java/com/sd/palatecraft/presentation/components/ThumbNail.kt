@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -55,9 +56,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.R
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
-import com.sd.palatecraft.data.remote.Meal
+import com.sd.palatecraft.data.remote.dto.Meal
 import com.sd.palatecraft.ui.theme.Black40
-import com.sd.palatecraft.ui.theme.BlackA40
 import com.sd.palatecraft.ui.theme.BlackA60
 import com.sd.palatecraft.ui.theme.WhiteA90
 import com.sd.palatecraft.util.backgrounds
@@ -67,17 +67,20 @@ import com.sd.palatecraft.util.backgrounds
 fun ThumbNail(recipe: Meal) {
     val background by remember{ mutableIntStateOf(backgrounds.random()) }
     val width = LocalConfiguration.current.screenWidthDp
+    val height = LocalConfiguration.current.screenHeightDp
     var isSheetOpen by remember { mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
             .aspectRatio(0.5f)
+            .heightIn(min=(0.8*height).dp, max = height.dp)
+            .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
             .paint(
                 painter = painterResource(id = background),
                 contentScale = ContentScale.Crop,
                 colorFilter = ColorFilter.tint(color = BlackA60, blendMode = BlendMode.Darken)
             )
-            .padding(PaddingValues(15.dp, 85.dp, 15.dp, 30.dp)),
+            .padding(PaddingValues(start = 15.dp, top = 85.dp, end = 15.dp, bottom = 30.dp)),
         contentAlignment = Alignment.TopCenter
     ){
         Column(verticalArrangement = Arrangement.Top,

@@ -5,6 +5,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 
 @Destination
 @Composable
-fun IngredientDetailsScreen(area: String) {
+fun IngredientDetailsScreen(ingredientName: String) {
 
 }

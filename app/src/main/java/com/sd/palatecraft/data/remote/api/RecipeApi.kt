@@ -1,5 +1,15 @@
-package com.sd.palatecraft.data.remote
+package com.sd.palatecraft.data.remote.api
 
+import com.sd.palatecraft.data.remote.dto.FilterByArea
+import com.sd.palatecraft.data.remote.dto.FilterByCategory
+import com.sd.palatecraft.data.remote.dto.FilterByIngredient
+import com.sd.palatecraft.data.remote.dto.ListMealByFirstLetter
+import com.sd.palatecraft.data.remote.dto.ListOfArea
+import com.sd.palatecraft.data.remote.dto.ListOfCategories
+import com.sd.palatecraft.data.remote.dto.ListOfIngredients
+import com.sd.palatecraft.data.remote.dto.RandomMeal
+import com.sd.palatecraft.data.remote.dto.SearchMealById
+import com.sd.palatecraft.data.remote.dto.SearchMealByName
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -34,7 +44,7 @@ interface RecipeApi  {
     suspend fun listIngredients(@Query("i") ingredients: String = "list"): Response<ListOfIngredients>
 
     //https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast
-    @GET("/filter.php")
+    @GET("filter.php")
     suspend fun filterByIngredient(@Query("i") ingredient: String): Response<FilterByIngredient>
 
     //https://www.themealdb.com/api/json/v1/1/filter.php?c=Seafood
@@ -42,6 +52,6 @@ interface RecipeApi  {
     suspend fun filterByCategory(@Query("c") category: String): Response<FilterByCategory>
 
     //https://www.themealdb.com/api/json/v1/1/filter.php?a=Canadian
-    @GET("/filter.php")
+    @GET("filter.php")
     suspend fun filterByArea(@Query("a") area: String): Response<FilterByArea>
 }

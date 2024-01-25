@@ -1,14 +1,16 @@
 package com.sd.palatecraft.data.reposiory
 
-import com.sd.palatecraft.data.remote.FilterByCategory
-import com.sd.palatecraft.data.remote.ListMealByFirstLetter
-import com.sd.palatecraft.data.remote.ListOfArea
-import com.sd.palatecraft.data.remote.ListOfCategories
-import com.sd.palatecraft.data.remote.ListOfIngredients
-import com.sd.palatecraft.data.remote.RandomMeal
-import com.sd.palatecraft.data.remote.RecipeApi
-import com.sd.palatecraft.data.remote.SearchMealById
-import com.sd.palatecraft.data.remote.SearchMealByName
+import com.sd.palatecraft.data.remote.dto.FilterByArea
+import com.sd.palatecraft.data.remote.dto.FilterByCategory
+import com.sd.palatecraft.data.remote.dto.ListMealByFirstLetter
+import com.sd.palatecraft.data.remote.dto.ListOfArea
+import com.sd.palatecraft.data.remote.dto.ListOfCategories
+import com.sd.palatecraft.data.remote.dto.ListOfIngredients
+import com.sd.palatecraft.data.remote.dto.RandomMeal
+import com.sd.palatecraft.data.remote.api.RecipeApi
+import com.sd.palatecraft.data.remote.dto.FilterByIngredient
+import com.sd.palatecraft.data.remote.dto.SearchMealById
+import com.sd.palatecraft.data.remote.dto.SearchMealByName
 import retrofit2.Response
 
 class MainRepository(
@@ -45,6 +47,14 @@ class MainRepository(
 
     override suspend fun filterByCategory(category: String): Response<FilterByCategory>{
         return api.filterByCategory(category = category)
+    }
+
+    override suspend fun filterByArea(area: String): Response<FilterByArea> {
+        return api.filterByArea(area = area)
+    }
+
+    override suspend fun filterByMainIngredient(ingredient: String): Response<FilterByIngredient> {
+        return api.filterByIngredient(ingredient = ingredient)
     }
 
 }

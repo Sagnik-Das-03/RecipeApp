@@ -21,15 +21,6 @@
               <type value="RUNNING_DEVICE_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="e5b237f2" />
-                </Key>
-              </deviceKey>
-            </Target>
-            <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
-              <deviceKey>
-                <Key>
                   <type value="VIRTUAL_DEVICE_PATH" />
                   <value value="C:\Users\sagni\.android\avd\Pixel_7_Pro_API_34.avd" />
                 </Key>

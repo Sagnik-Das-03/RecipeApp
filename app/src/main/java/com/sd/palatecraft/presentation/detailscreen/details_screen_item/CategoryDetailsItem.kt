@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.MainViewModel
-import com.sd.palatecraft.data.remote.FilteredMeals
+import com.sd.palatecraft.data.remote.dto.FilteredMeals
 import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer

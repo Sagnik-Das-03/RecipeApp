@@ -2,7 +2,6 @@ package com.sd.palatecraft.presentation.components.listitems
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -23,16 +24,18 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.presentation.destinations.CategoryDetailsScreenDestination
-import com.sd.palatecraft.data.remote.Category
+import com.sd.palatecraft.data.remote.dto.Category
 
 @Composable
 fun CategoryItem(category: Category, navigator: DestinationsNavigator) {
-    Box(
-        contentAlignment = Alignment.Center,
+    Card(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 4.dp
+        ),
         modifier = Modifier
             .padding(horizontal = 8.dp, vertical = 10.dp)
             .background(
-                color = MaterialTheme.colorScheme.primaryContainer,
+                color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.7f),
                 shape = RoundedCornerShape(10.dp)
             )
     ) {

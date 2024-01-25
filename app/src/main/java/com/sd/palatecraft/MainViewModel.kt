@@ -5,12 +5,11 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sd.palatecraft.data.remote.Area
-import com.sd.palatecraft.data.remote.Category
-import com.sd.palatecraft.data.remote.FilteredMeals
-import com.sd.palatecraft.data.remote.Ingredients
-import com.sd.palatecraft.data.remote.Meal
-import com.sd.palatecraft.data.reposiory.MainRepository
+import com.sd.palatecraft.data.remote.dto.Area
+import com.sd.palatecraft.data.remote.dto.Category
+import com.sd.palatecraft.data.remote.dto.FilteredMeals
+import com.sd.palatecraft.data.remote.dto.Ingredients
+import com.sd.palatecraft.data.remote.dto.Meal
 import com.sd.palatecraft.data.reposiory.Repository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,31 +62,35 @@ class MainViewModel(
     fun getRandomRecipe(){
         fetchRandomRecipes()
     }
+    private var isDataLoaded = false
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchRandomRecipes() {
         viewModelScope.launch {
-            delay(1500L)
-            try {
-                val response = repository.getRandomRecipe()
-                if (response.isSuccessful) {
-                    _recipes.value = response.body()?.meals ?: emptyList()
-                    Log.i(TAG, "API called: ${getCurrentDateTime()}")
-                } else {
+            delay(2500L)
+            if(!isDataLoaded){
+                try {
+                    val response = repository.getRandomRecipe()
+                    if (response.isSuccessful) {
+                        _recipes.value = response.body()?.meals ?: emptyList()
+                        Log.i(TAG, "API called: ${getCurrentDateTime()}")
+                    } else {
+                        _isError.value = true
+                        _message.value = "Check Internet Connection"
+                    }
+                }catch (e: HttpException) {
                     _isError.value = true
-                    _message.value = "Check Internet Connection"
+                    Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+                } catch (e: SocketTimeoutException) {
+                    _isError.value = true
+                    Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+                }catch (e: Exception) {
+                    _isError.value = true
+                    _message.value = "${e.message}"
+                    Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
+                } finally {
+                    isDataLoaded = true
+                    _isLoading.value = false
                 }
-            }catch (e: HttpException) {
-                _isError.value = true
-                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
-            } catch (e: SocketTimeoutException) {
-                _isError.value = true
-                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
-            }catch (e: Exception) {
-                _isError.value = true
-                _message.value = "${e.message}"
-                Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
-            } finally {
-                _isLoading.value = false
             }
         }
     }
@@ -398,6 +401,115 @@ class MainViewModel(
                 Log.e(TAG, "Exception: ${e.message} \n date: ${getCurrentDateTime()}")
             } finally {
                 _isLoading.value = false
+            }
+        }
+    }
+
+    fun searchByArea(area: String){
+        getByArea(query = area)
+    }
+    private fun getByArea(query: String) {
+        viewModelScope.launch {
+            updateQuery(query = query)
+            delay(2500L)
+            if (
+                query.length > 1
+                && !query.contains(regex = "[0-9]+".toRegex())
+                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                try {
+                    val response =repository.filterByArea(area = query)
+                    if (response.isSuccessful) {
+                        _filteredMeals.value = response.body()?.meals ?: emptyList()
+                        Log.i(TAG, "Api called: ${getCurrentDateTime()}")
+                        _isError.value = false
+                        _isLoading.value = false
+                    } else {
+                        _isError.value = true
+                        _message.value = "Error Calling API for query $query : ${getCurrentDateTime()}"
+                        Log.e(TAG, _message.value)
+                    }
+                } catch (e: HttpException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } catch (e: SocketTimeoutException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } finally {
+                    _isLoading.value = false
+                }
+
+            } else if (
+                query.isBlank()
+            ) {
+                _isLoading.value = true
+                Log.e(TAG, "Error Calling API for empty blank query $query : ${getCurrentDateTime()}")
+            }else if (
+                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                _isError.value = true
+                _isLoading.value = false
+                _message.value = "Search Query: $query is not a Word"
+                Log.e(TAG, "Error Calling API for query $query : ${getCurrentDateTime()}")
+            } else {
+                _isError.value = false
+            }
+        }
+    }
+
+
+    fun searchByIngredient(ingredient: String){
+        getByIngredient(query = ingredient)
+    }
+    private fun getByIngredient(query: String){
+        viewModelScope.launch {
+            updateQuery(query = query)
+            delay(2500L)
+            if (
+                query.length > 1
+                && !query.contains(regex = "[0-9]+".toRegex())
+                && !query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                try {
+                    val response =repository.filterByMainIngredient(ingredient = query)
+                    if (response.isSuccessful) {
+                        _filteredMeals.value = response.body()?.meals ?: emptyList()
+                        Log.i(TAG, "Api called: ${getCurrentDateTime()}")
+                        _isError.value = false
+                        _isLoading.value = false
+                    } else {
+                        _isError.value = true
+                        _message.value = "Error Calling API for query $query : ${getCurrentDateTime()}"
+                        Log.e(TAG, _message.value)
+                    }
+                } catch (e: HttpException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } catch (e: SocketTimeoutException) {
+                    _isError.value = true
+                    _message.value = "Exception:${e.message} \n time: ${getCurrentDateTime()}"
+                    Log.e(TAG, _message.value)
+                } finally {
+                    _isLoading.value = false
+                }
+
+            } else if (
+                query.isBlank()
+            ) {
+                _isLoading.value = true
+                Log.e(TAG, "Error Calling API for empty blank query $query : ${getCurrentDateTime()}")
+            }else if (
+                query.contains(regex = "[0-9]+".toRegex()) || query.contains(regex = "[^a-zA-Z0-9 ]".toRegex())
+            ) {
+                _isError.value = true
+                _isLoading.value = false
+                _message.value = "Search Query: $query is not a Word"
+                Log.e(TAG, "Error Calling API for query $query : ${getCurrentDateTime()}")
+            } else {
+                _isError.value = false
             }
         }
     }

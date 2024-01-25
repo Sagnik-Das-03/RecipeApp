@@ -51,7 +51,9 @@ import com.sd.palatecraft.presentation.destinations.IngredientsScreenDestination
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
 import com.sd.palatecraft.presentation.destinations.SearchLetterDestination
 import com.sd.palatecraft.presentation.destinations.SearchNameDestination
-import com.sd.palatecraft.data.remote.Meal
+import com.sd.palatecraft.data.remote.dto.Meal
+import com.sd.palatecraft.presentation.destinations.FilterAreaScreenDestination
+import com.sd.palatecraft.presentation.destinations.FilterIngredientScreenDestination
 import com.sd.palatecraft.ui.theme.BlackA60
 import com.sd.palatecraft.util.navItems
 import kotlinx.coroutines.delay
@@ -130,6 +132,14 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                                     6 -> {
                                         delay(500L)
                                         navigator.navigate(FilterCategoryScreenDestination)
+                                    }
+                                    7 -> {
+                                        delay(500L)
+                                        navigator.navigate(FilterAreaScreenDestination)
+                                    }
+                                    8 -> {
+                                        delay(500L)
+                                        navigator.navigate(FilterIngredientScreenDestination)
                                     }
                                 }
                             }

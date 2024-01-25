@@ -3,7 +3,7 @@ package com.sd.palatecraft.di
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.sd.palatecraft.MainViewModel
-import com.sd.palatecraft.data.remote.RecipeApi
+import com.sd.palatecraft.data.remote.api.RecipeApi
 import com.sd.palatecraft.data.reposiory.MainRepository
 import com.sd.palatecraft.data.reposiory.Repository
 import org.koin.androidx.viewmodel.dsl.viewModel

@@ -520,7 +520,10 @@ class MainViewModel(
         }
     }
 
-    fun getMeals(){
+    init {
+        getMeals()
+    }
+    private fun getMeals(){
         viewModelScope.launch(Dispatchers.IO) {
             repository.getMeals().collect{data->
                 _meals.update { data }

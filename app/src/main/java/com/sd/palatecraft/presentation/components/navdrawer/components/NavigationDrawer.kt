@@ -1,10 +1,13 @@
 package com.sd.palatecraft.presentation.components.navdrawer.components
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,9 +15,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -44,38 +50,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.R
+import com.sd.palatecraft.data.remote.dto.Meal
 import com.sd.palatecraft.presentation.components.listitems.RecipeItem
 import com.sd.palatecraft.presentation.destinations.AreasScreenDestination
 import com.sd.palatecraft.presentation.destinations.CategoriesScreenDestination
+import com.sd.palatecraft.presentation.destinations.FilterAreaScreenDestination
 import com.sd.palatecraft.presentation.destinations.FilterCategoryScreenDestination
+import com.sd.palatecraft.presentation.destinations.FilterIngredientScreenDestination
 import com.sd.palatecraft.presentation.destinations.IngredientsScreenDestination
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
 import com.sd.palatecraft.presentation.destinations.SearchLetterDestination
 import com.sd.palatecraft.presentation.destinations.SearchNameDestination
-import com.sd.palatecraft.data.remote.dto.Meal
-import com.sd.palatecraft.presentation.destinations.FilterAreaScreenDestination
-import com.sd.palatecraft.presentation.destinations.FilterIngredientScreenDestination
+import com.sd.palatecraft.presentation.destinations.StarredScreenDestination
 import com.sd.palatecraft.ui.theme.BlackA60
 import com.sd.palatecraft.util.WithAnimation
 import com.sd.palatecraft.util.navItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.getViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val scrollState = rememberScrollState()
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet(
+                modifier = Modifier.verticalScroll(scrollState),
                 drawerContainerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
             ) {
                 Box(
@@ -170,16 +178,19 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
         Scaffold(
             topBar = {
                 TopAppBar(title = {
-                    Row{
-                        Text(
-                            text = "PalateCraft",
-                            letterSpacing = 4.sp,
-                            style = MaterialTheme.typography.displaySmall,
-                            color = Color.Transparent,
-                            fontFamily = FontFamily.Cursive,
-                            fontWeight = FontWeight.ExtraBold,
-                            modifier = Modifier.padding(vertical = 16.dp)
-                        )
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ){
+                        IconButton(
+                            modifier = Modifier.background(color = BlackA60, shape = RoundedCornerShape(topStart = 50f, bottomStart = 50f)),
+                            onClick = {
+                            navigator.navigate(StarredScreenDestination(isError = false))}
+                        ) {
+                            Icon(imageVector = Icons.Outlined.Star,
+                                contentDescription = "Go to Starred",
+                                tint = MaterialTheme.colorScheme.onSecondary)
+                        }
                     }
                 },
                     navigationIcon = {

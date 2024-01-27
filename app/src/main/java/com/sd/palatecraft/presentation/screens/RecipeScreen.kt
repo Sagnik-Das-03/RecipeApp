@@ -9,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -43,6 +45,7 @@ import com.sd.palatecraft.R
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.navdrawer.components.NavigationDrawer
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
+import com.sd.palatecraft.presentation.destinations.StarredScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -120,16 +123,31 @@ fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                             "Please Check Your Internet Connection",
                             Toast.LENGTH_LONG
                         ).show()
-                        FilledTonalButton(onClick = {
-                            navigator.navigate(RecipeScreenDestination)
-                        }) {
-                            Text(text = "Refresh")
-                            Spacer(modifier = Modifier.width(10.dp))
-                            Icon(
-                                imageVector = Icons.Filled.Refresh,
-                                contentDescription = "Refresh",
-                                modifier = Modifier.size(18.dp)
-                            )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            FilledTonalButton(onClick = {
+                                navigator.navigate(RecipeScreenDestination)
+                            }) {
+                                Text(text = "Refresh")
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Icon(
+                                    imageVector = Icons.Filled.Refresh,
+                                    contentDescription = "Refresh",
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
+                            FilledTonalButton(onClick = {
+                                navigator.navigate(StarredScreenDestination(isError= isError))
+                            }) {
+                                Text(text = "Check Saved Recipes")
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Icon(
+                                    imageVector = Icons.Filled.Star,
+                                    contentDescription = "Refresh",
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
                         }
                     }
                 }

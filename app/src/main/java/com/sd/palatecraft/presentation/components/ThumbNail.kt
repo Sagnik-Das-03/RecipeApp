@@ -1,6 +1,7 @@
 package com.sd.palatecraft.presentation.components
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.PlayArrow
+import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
@@ -47,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
@@ -71,6 +74,7 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
     val background by remember{ mutableIntStateOf(backgrounds.random()) }
+    val context = LocalContext.current
     val width = LocalConfiguration.current.screenWidthDp
     val height = LocalConfiguration.current.screenHeightDp
     var isSheetOpen by remember { mutableStateOf(false) }
@@ -78,14 +82,14 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
     Box(
         modifier = Modifier
             .aspectRatio(0.5f)
-            .heightIn(min=(0.8*height).dp, max = height.dp)
+            .heightIn(min = (0.8 * height).dp, max = (height * 1.5).dp)
             .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
             .paint(
                 painter = painterResource(id = background),
                 contentScale = ContentScale.Crop,
                 colorFilter = ColorFilter.tint(color = BlackA60, blendMode = BlendMode.Darken)
             )
-            .padding(PaddingValues(start = 15.dp, top = 85.dp, end = 15.dp, bottom = 30.dp)),
+            .padding(PaddingValues(start = 15.dp, top = 80.dp, end = 15.dp, bottom = 15.dp)),
         contentAlignment = Alignment.TopCenter
     ){
         Column(verticalArrangement = Arrangement.Top,
@@ -139,27 +143,50 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                     color = WhiteA90)
                 Spacer(modifier = Modifier.size(25.dp))
             }
-            ElevatedButton(
-                onClick = {
-                    isSheetOpen = true
-                    viewModel.addMeal(meal = recipe.toMealEntity())},
-                modifier = Modifier.shadow(elevation = 8.dp, ambientColor = Color.Red, spotColor = Color.Red),
-                colors = ButtonDefaults.filledTonalButtonColors(Color.Red)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = "Open in YouTube",
-                    fontStyle = FontStyle.Italic,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.sp,
-                    fontFamily = FontFamily.SansSerif,
-                    color = WhiteA90)
-                Spacer(modifier = Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.TwoTone.PlayArrow,
-                    contentDescription = "Play on Youtube",
-                    tint = WhiteA90,
-                    modifier = Modifier.size(18.dp))
+                ElevatedButton(
+                    onClick = { isSheetOpen = true },
+                    colors = ButtonDefaults.filledTonalButtonColors(Color.Red)
+                ) {
+                    Text(text = "Video",
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        color = WhiteA90)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.TwoTone.PlayArrow,
+                        contentDescription = "Play on Youtube",
+                        tint = WhiteA90,
+                        modifier = Modifier.size(18.dp))
+                }
+                ElevatedButton(
+                    onClick = {
+                        viewModel.addMeal(meal = recipe.toMealEntity())
+                        Toast.makeText(context, "Recipe Saved", Toast.LENGTH_SHORT).show()
+                    },
+                    colors = ButtonDefaults.filledTonalButtonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    )
+                ) {
+                    Text(text = "Bookmark",
+                        fontStyle = FontStyle.Italic,
+                        fontWeight = FontWeight.ExtraBold,
+                        fontSize = 15.sp,
+                        fontFamily = FontFamily.SansSerif,
+                        color = WhiteA90)
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        imageVector = Icons.TwoTone.Star,
+                        contentDescription = "Save",
+                        tint = WhiteA90,
+                        modifier = Modifier.size(18.dp))
+                }
             }
-            Spacer(modifier = Modifier.size(25.dp))
             Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.offset(10.dp)){
                 Text(text = "Swipe Up for Instructions",
                     fontStyle = FontStyle.Italic,

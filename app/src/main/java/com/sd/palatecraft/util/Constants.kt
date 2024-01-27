@@ -4,9 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import com.sd.palatecraft.R

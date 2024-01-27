@@ -1,5 +1,7 @@
 package com.sd.palatecraft.data.reposiory
 
+import com.sd.palatecraft.data.local.MealDatabase
+import com.sd.palatecraft.data.local.MealEntitiy
 import com.sd.palatecraft.data.remote.dto.FilterByArea
 import com.sd.palatecraft.data.remote.dto.FilterByCategory
 import com.sd.palatecraft.data.remote.dto.ListMealByFirstLetter
@@ -11,12 +13,14 @@ import com.sd.palatecraft.data.remote.api.RecipeApi
 import com.sd.palatecraft.data.remote.dto.FilterByIngredient
 import com.sd.palatecraft.data.remote.dto.SearchMealById
 import com.sd.palatecraft.data.remote.dto.SearchMealByName
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class MainRepository(
-    private val api: RecipeApi
+    private val api: RecipeApi,
+    private val database: MealDatabase
 ): Repository {
-
+    private val dao = database.mealDao()
     override suspend fun getRandomRecipe(): Response<RandomMeal> {
         return api.getRandomRecipe()
     }
@@ -57,5 +61,10 @@ class MainRepository(
         return api.filterByIngredient(ingredient = ingredient)
     }
 
+    override suspend fun getMeals(): Flow<List<MealEntitiy>> = dao.getTodos()
+
+    override suspend fun addMeals(meal: MealEntitiy) = dao.addTodo(meal)
+
+    override suspend fun deleteMeals(meal: MealEntitiy) = dao.deleteTodo(meal)
 }
 

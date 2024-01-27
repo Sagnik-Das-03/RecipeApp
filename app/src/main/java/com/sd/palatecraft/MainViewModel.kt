@@ -5,16 +5,19 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sd.palatecraft.data.local.MealEntitiy
 import com.sd.palatecraft.data.remote.dto.Area
 import com.sd.palatecraft.data.remote.dto.Category
 import com.sd.palatecraft.data.remote.dto.FilteredMeals
 import com.sd.palatecraft.data.remote.dto.Ingredients
 import com.sd.palatecraft.data.remote.dto.Meal
 import com.sd.palatecraft.data.reposiory.Repository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.net.SocketTimeoutException
@@ -53,6 +56,9 @@ class MainViewModel(
 
     private val _currentQuery = MutableStateFlow("")
     val currentQuery: StateFlow<String> = _currentQuery.asStateFlow()
+
+    private val _meals:MutableStateFlow<List<MealEntitiy>> = MutableStateFlow(emptyList())
+    val meals = _meals.asStateFlow()
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getCurrentDateTime(): String {
@@ -511,6 +517,25 @@ class MainViewModel(
             } else {
                 _isError.value = false
             }
+        }
+    }
+
+    fun getMeals(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getMeals().collect{data->
+                _meals.update { data }
+            }
+        }
+    }
+
+    fun addMeal(meal: MealEntitiy){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addMeals(meal)
+        }
+    }
+    fun deleteMeal(meal: MealEntitiy){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteMeals(meal)
         }
     }
 }

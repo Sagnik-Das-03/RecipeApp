@@ -44,6 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.R
 import com.sd.palatecraft.presentation.components.listitems.RecipeItem
 import com.sd.palatecraft.presentation.destinations.AreasScreenDestination
@@ -61,6 +62,7 @@ import com.sd.palatecraft.util.WithAnimation
 import com.sd.palatecraft.util.navItems
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)

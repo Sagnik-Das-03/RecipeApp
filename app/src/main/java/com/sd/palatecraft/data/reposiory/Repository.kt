@@ -1,5 +1,6 @@
 package com.sd.palatecraft.data.reposiory
 
+import com.sd.palatecraft.data.local.MealEntitiy
 import com.sd.palatecraft.data.remote.dto.FilterByArea
 import com.sd.palatecraft.data.remote.dto.FilterByCategory
 import com.sd.palatecraft.data.remote.dto.FilterByIngredient
@@ -10,6 +11,7 @@ import com.sd.palatecraft.data.remote.dto.ListOfIngredients
 import com.sd.palatecraft.data.remote.dto.RandomMeal
 import com.sd.palatecraft.data.remote.dto.SearchMealById
 import com.sd.palatecraft.data.remote.dto.SearchMealByName
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 interface Repository {
@@ -32,4 +34,10 @@ interface Repository {
     suspend fun filterByArea(area: String): Response<FilterByArea>
 
     suspend fun filterByMainIngredient(ingredient: String): Response<FilterByIngredient>
+
+    suspend fun getMeals(): Flow<List<MealEntitiy>>
+
+    suspend fun addMeals(meal:MealEntitiy)
+
+    suspend fun deleteMeals(meal: MealEntitiy)
 }

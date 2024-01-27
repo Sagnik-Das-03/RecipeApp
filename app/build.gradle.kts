@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("kotlin-parcelize")
+    id ("org.jetbrains.kotlin.kapt")
     id("com.google.devtools.ksp") version "1.8.10-1.0.9"
 }
 
@@ -109,4 +110,11 @@ dependencies {
     implementation ("io.insert-koin:koin-android:3.2.0-beta-1")
     //Youtube Player
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+    // Room
+    implementation("androidx.room:room-runtime:2.5.2")
+    annotationProcessor("androidx.room:room-compiler:2.5.2")
+    implementation("androidx.room:room-ktx:2.5.2")
+    kapt ("androidx.room:room-compiler:2.5.2")
+
 }

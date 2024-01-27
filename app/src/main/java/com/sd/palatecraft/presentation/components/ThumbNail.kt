@@ -1,5 +1,7 @@
 package com.sd.palatecraft.presentation.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -54,6 +56,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.R
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
 import com.sd.palatecraft.data.remote.dto.Meal
@@ -61,10 +64,12 @@ import com.sd.palatecraft.ui.theme.Black40
 import com.sd.palatecraft.ui.theme.BlackA60
 import com.sd.palatecraft.ui.theme.WhiteA90
 import com.sd.palatecraft.util.backgrounds
+import org.koin.androidx.compose.getViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ThumbNail(recipe: Meal) {
+fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
     val background by remember{ mutableIntStateOf(backgrounds.random()) }
     val width = LocalConfiguration.current.screenWidthDp
     val height = LocalConfiguration.current.screenHeightDp
@@ -134,7 +139,10 @@ fun ThumbNail(recipe: Meal) {
                     color = WhiteA90)
                 Spacer(modifier = Modifier.size(25.dp))
             }
-            ElevatedButton(onClick = { isSheetOpen = true },
+            ElevatedButton(
+                onClick = {
+                    isSheetOpen = true
+                    viewModel.addMeal(meal = recipe.toMealEntity())},
                 modifier = Modifier.shadow(elevation = 8.dp, ambientColor = Color.Red, spotColor = Color.Red),
                 colors = ButtonDefaults.filledTonalButtonColors(Color.Red)
             ) {

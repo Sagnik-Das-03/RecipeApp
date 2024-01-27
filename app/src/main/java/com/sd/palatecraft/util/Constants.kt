@@ -46,7 +46,7 @@ val navItems = listOf(
         unselectedIcon = Icons.Outlined.Search,
     ),
     NavigationItem(
-        title = "All Meal Categories",
+        title = "List of Categories",
         selectedIcon = Icons.Filled.List,
         unselectedIcon = Icons.Outlined.List,
     ),
@@ -61,17 +61,17 @@ val navItems = listOf(
         unselectedIcon = Icons.Outlined.List,
     ),
     NavigationItem(
-        title = "Filter By Category",
+        title = "Search By Category",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
     ),
     NavigationItem(
-        title = "Filter By Area",
+        title = "Search By Area",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
     ),
     NavigationItem(
-        title = "Filter By Ingredient",
+        title = "Search By Ingredient",
         selectedIcon = Icons.Filled.Search,
         unselectedIcon = Icons.Outlined.Search,
     )

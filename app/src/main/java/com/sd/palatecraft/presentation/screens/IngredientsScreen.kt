@@ -1,6 +1,8 @@
 package com.sd.palatecraft.presentation.screens
 
+import android.content.Context.MODE_PRIVATE
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
@@ -18,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.FilledTonalButton
@@ -29,8 +32,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -40,8 +45,12 @@ import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.IngredientItem
 import com.sd.palatecraft.presentation.destinations.RecipeScreenDestination
 import com.sd.palatecraft.util.WithAnimation
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import org.koin.androidx.compose.getViewModel
 
+@OptIn(FlowPreview::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
@@ -49,6 +58,23 @@ fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel
     val ingredients by viewModel.ingredients.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)
+    val context = LocalContext.current
+    val prefs = context.getSharedPreferences("prefs", MODE_PRIVATE)
+    val scrollPosition = prefs.getInt("scroll_position_i", 0)
+    val lazyGridState = rememberLazyStaggeredGridState(
+        initialFirstVisibleItemIndex = scrollPosition
+    )
+    LaunchedEffect(lazyGridState){
+        snapshotFlow {
+            lazyGridState.firstVisibleItemIndex
+        }
+            .debounce(500L)
+            .collectLatest {index ->
+                prefs.edit()
+                    .putInt("scroll_position_i", index)
+                    .apply()
+            }
+    }
     LaunchedEffect(Unit) {
         viewModel.listIngredients()
     }
@@ -106,6 +132,7 @@ fun IngredientsScreen(navigator: DestinationsNavigator, viewModel: MainViewModel
                 )
             }
             LazyVerticalStaggeredGrid(
+                state = lazyGridState,
                 columns = StaggeredGridCells.Fixed(count = 2),
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary)
             ){

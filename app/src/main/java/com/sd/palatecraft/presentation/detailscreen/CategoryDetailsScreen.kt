@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,8 +34,9 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
+import com.sd.palatecraft.presentation.components.listitems.FilterItem
 import com.sd.palatecraft.presentation.destinations.CategoriesScreenDestination
-import com.sd.palatecraft.presentation.detailscreen.details_screen_item.CategoryDetailsItem
+import com.sd.palatecraft.util.backgrounds
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -82,7 +84,7 @@ fun CategoryDetailsScreen(
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary)) {
+                    .background(MaterialTheme.colorScheme.onSecondary)) {
                 Spacer(modifier = Modifier.width(18.dp))
                 FilledTonalIconButton( modifier = Modifier.weight(0.15f),onClick = { navigator.navigate(
                     CategoriesScreenDestination
@@ -90,15 +92,18 @@ fun CategoryDetailsScreen(
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back To List of Categories")
                 }
                 Spacer(modifier = Modifier.width(18.dp))
-                Text(text = "List of Dishes", color = MaterialTheme.colorScheme.onPrimary, fontFamily = FontFamily.Cursive, style = MaterialTheme.typography.displaySmall, modifier = Modifier
+                Text(text = "List of Dishes", color = MaterialTheme.colorScheme.secondary, fontFamily = FontFamily.Cursive, style = MaterialTheme.typography.displaySmall, modifier = Modifier
                     .padding(vertical = 16.dp)
                     .weight(0.75f))
             }
-            LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Fixed(2)){
+            LazyHorizontalStaggeredGrid(
+                contentPadding = PaddingValues(bottom = 180.dp),
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary),
+                rows = StaggeredGridCells.Fixed(1)){
                 items(
                     items = filteredMeals
                 ){meal ->
-                    CategoryDetailsItem(meal = meal)
+                    FilterItem(navigator = navigator, filteredMeal = meal)
                 }
             }
         }

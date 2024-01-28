@@ -33,7 +33,7 @@ fun Instructions(recipe: Meal) {
                 brush = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.inverseOnSurface, MaterialTheme.colorScheme.surface)),
                 shape = RoundedCornerShape(10.dp)
             )
-            .padding(PaddingValues(35.dp, 30.dp))
+            .padding(PaddingValues(horizontal = 35.dp, vertical = 30.dp))
         ){
             Text(text = "Instructions",
                 fontStyle = FontStyle.Italic,

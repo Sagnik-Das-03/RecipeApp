@@ -81,9 +81,8 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
     val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
-            .aspectRatio(0.5f)
-            .heightIn(min = (0.8 * height).dp, max = (height * 1.5).dp)
-            .clip(RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp))
+            .heightIn(min = (0.5 * height).dp, max = (height * 0.95).dp)
+            .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
             .paint(
                 painter = painterResource(id = background),
                 contentScale = ContentScale.Crop,
@@ -97,7 +96,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
             modifier = Modifier
                 .background(
                     brush = Brush.linearGradient(colors = listOf(Black40, BlackA60)),
-                    shape = RoundedCornerShape(10.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
                 .padding(PaddingValues(start = 40.dp, top = 20.dp, end = 40.dp, bottom = 20.dp))
         ){

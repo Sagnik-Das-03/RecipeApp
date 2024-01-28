@@ -31,6 +31,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,7 +79,7 @@ fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                 // Display loading indicator
                 Column(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                        .background(MaterialTheme.colorScheme.onSecondaryContainer)
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -84,7 +87,8 @@ fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                     Image(
                         painter = painterResource(id = R.drawable.icon_bg),
                         contentDescription = "Icon",
-                        modifier = Modifier.scale(1.5f)
+                        modifier = Modifier.scale(1.5f),
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondaryContainer)
                     )
                     Spacer(modifier = Modifier.size(80.dp))
                     Text(

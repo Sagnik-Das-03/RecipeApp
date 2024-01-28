@@ -25,6 +25,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -44,6 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -64,6 +66,7 @@ import com.sd.palatecraft.presentation.destinations.SearchLetterDestination
 import com.sd.palatecraft.presentation.destinations.SearchNameDestination
 import com.sd.palatecraft.presentation.destinations.StarredScreenDestination
 import com.sd.palatecraft.ui.theme.BlackA60
+import com.sd.palatecraft.ui.theme.WhiteA90
 import com.sd.palatecraft.util.WithAnimation
 import com.sd.palatecraft.util.navItems
 import kotlinx.coroutines.delay
@@ -91,13 +94,16 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                     modifier = Modifier
                         .padding(bottom = 16.dp)
                         .fillMaxWidth()
-                        .aspectRatio(1.8f)
+                        .aspectRatio(1.5f)
                         .background(
-                            MaterialTheme.colorScheme.onPrimaryContainer,
+                            MaterialTheme.colorScheme.onSecondaryContainer,
                             shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)
                         )
                 ){
-                    Image(painter = painterResource(id = R.drawable.icon_bg), contentDescription = "Icon")
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_bg),
+                        contentDescription = "Icon",
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondaryContainer))
                 }
                 navItems.forEachIndexed { index, navigationItem ->
                     NavigationDrawerItem(
@@ -120,7 +126,7 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                                 when(selectedItemIndex){
                                     0 -> {
                                         delay(500L)
-                                        navigator.navigate(RecipeScreenDestination)
+                                        drawerState.close()
                                     }
                                     1 -> {
                                         delay(500L)
@@ -183,18 +189,25 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                         modifier = Modifier.fillMaxWidth()
                     ){
                         IconButton(
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                contentColor = WhiteA90,
+                                containerColor = Color.Transparent
+                            ),
                             modifier = Modifier.background(color = BlackA60, shape = RoundedCornerShape(topStart = 50f, bottomStart = 50f)),
                             onClick = {
                             navigator.navigate(StarredScreenDestination(isError = false))}
                         ) {
                             Icon(imageVector = Icons.Outlined.Star,
-                                contentDescription = "Go to Starred",
-                                tint = MaterialTheme.colorScheme.onSecondary)
+                                contentDescription = "Go to Starred")
                         }
                     }
                 },
                     navigationIcon = {
                         IconButton(
+                            colors = IconButtonDefaults.filledIconButtonColors(
+                                contentColor = WhiteA90,
+                                containerColor = Color.Transparent
+                            ),
                             modifier = Modifier.background(color = BlackA60, shape = RoundedCornerShape(topEnd = 50f, bottomEnd = 50f)),
                             onClick = {
                                 scope.launch {
@@ -205,7 +218,6 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
                                 contentDescription = "Menu",
-                                tint = MaterialTheme.colorScheme.onSecondary
                             )
                         }
                     },

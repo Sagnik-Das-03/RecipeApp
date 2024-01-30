@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -87,7 +88,7 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
         drawerContent = {
             ModalDrawerSheet(
                 modifier = Modifier.verticalScroll(scrollState),
-                drawerContainerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
+                drawerContainerColor = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.95f),
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -96,14 +97,14 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                         .fillMaxWidth()
                         .aspectRatio(1.5f)
                         .background(
-                            MaterialTheme.colorScheme.onSecondaryContainer,
+                            MaterialTheme.colorScheme.primaryContainer,
                             shape = RoundedCornerShape(bottomStart = 15.dp, bottomEnd = 15.dp)
                         )
                 ){
                     Image(
                         painter = painterResource(id = R.drawable.icon_bg),
                         contentDescription = "Icon",
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondaryContainer))
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onPrimaryContainer))
                 }
                 navItems.forEachIndexed { index, navigationItem ->
                     NavigationDrawerItem(
@@ -113,8 +114,8 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                             selectedTextColor =MaterialTheme.colorScheme.onPrimaryContainer,
                             selectedIconColor =MaterialTheme.colorScheme.onPrimaryContainer,
                             unselectedContainerColor = Color.Transparent,
-                            unselectedIconColor =MaterialTheme.colorScheme.primaryContainer,
-                            unselectedTextColor =MaterialTheme.colorScheme.primaryContainer,
+                            unselectedIconColor =MaterialTheme.colorScheme.onPrimaryContainer,
+                            unselectedTextColor =MaterialTheme.colorScheme.onPrimaryContainer,
                         ),
                         label = {
                             Text(text = navigationItem.title)
@@ -197,8 +198,9 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                             onClick = {
                             navigator.navigate(StarredScreenDestination(isError = false))}
                         ) {
-                            Icon(imageVector = Icons.Outlined.Star,
-                                contentDescription = "Go to Starred")
+                            Icon(painter = painterResource(id = R.drawable.bookmark_solid),
+                                contentDescription = "Go to Starred",
+                                modifier = Modifier.size(18.dp))
                         }
                     }
                 },

@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -92,18 +93,22 @@ fun CategoryDetailsScreen(
                     Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back To List of Categories")
                 }
                 Spacer(modifier = Modifier.width(18.dp))
-                Text(text = "List of Dishes", color = MaterialTheme.colorScheme.secondary, fontFamily = FontFamily.Cursive, style = MaterialTheme.typography.displaySmall, modifier = Modifier
-                    .padding(vertical = 16.dp)
-                    .weight(0.75f))
+                Text(text = "Category ($category)",
+                    color = MaterialTheme.colorScheme.secondary,
+                    fontFamily = FontFamily.Cursive,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.headlineLarge,
+                    modifier = Modifier.padding(vertical = 16.dp).weight(0.75f))
             }
             LazyHorizontalStaggeredGrid(
-                contentPadding = PaddingValues(bottom = 180.dp),
+                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 16.dp),
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.onSecondary),
-                rows = StaggeredGridCells.Fixed(1)){
+                rows = StaggeredGridCells.Fixed(2)){
                 items(
                     items = filteredMeals
                 ){meal ->
-                    FilterItem(navigator = navigator, filteredMeal = meal)
+                    FilterItem(filteredMeal = meal)
                 }
             }
         }

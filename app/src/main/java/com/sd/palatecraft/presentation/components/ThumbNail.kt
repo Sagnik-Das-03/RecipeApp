@@ -81,7 +81,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
     val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
-            .heightIn(min = (0.5 * height).dp, max = (height * 0.95).dp)
+            .heightIn(min = (0.5 * height).dp, max = (height*1.1).dp)
             .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
             .paint(
                 painter = painterResource(id = background),
@@ -157,7 +157,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                         color = WhiteA90)
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
-                        imageVector = Icons.TwoTone.PlayArrow,
+                        painter = painterResource(id = R.drawable.youtube),
                         contentDescription = "Play on Youtube",
                         tint = WhiteA90,
                         modifier = Modifier.size(18.dp))
@@ -180,12 +180,13 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                         color = WhiteA90)
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
-                        imageVector = Icons.TwoTone.Star,
+                        painter = painterResource(id = R.drawable.bookmark_solid),
                         contentDescription = "Save",
                         tint = WhiteA90,
                         modifier = Modifier.size(18.dp))
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
             Row (horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.offset(10.dp)){
                 Text(text = "Swipe Up for Instructions",
                     fontStyle = FontStyle.Italic,

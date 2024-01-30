@@ -66,7 +66,6 @@ fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
         viewModel.getRandomRecipe()
     }
 
-    // SwipeRefresh composable
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = false),
         onRefresh = {
@@ -79,7 +78,7 @@ fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                 // Display loading indicator
                 Column(
                     modifier = Modifier
-                        .background(MaterialTheme.colorScheme.onSecondaryContainer)
+                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -88,18 +87,18 @@ fun RecipeScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = ge
                         painter = painterResource(id = R.drawable.icon_bg),
                         contentDescription = "Icon",
                         modifier = Modifier.scale(1.5f),
-                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.secondaryContainer)
+                        colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.primaryContainer)
                     )
                     Spacer(modifier = Modifier.size(80.dp))
                     Text(
                         text = "Loading Recipes...",
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         style = MaterialTheme.typography.titleLarge
                     )
                     Spacer(modifier = Modifier.size(40.dp))
                     CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.primaryContainer,
                         modifier = Modifier.size(40.dp), strokeWidth = 5.dp
                     )
                 }

@@ -57,8 +57,8 @@ fun RecipeAppTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.onSecondaryContainer.toArgb()
-            window.navigationBarColor = colorScheme.onSecondaryContainer.toArgb()
+            window.statusBarColor = colorScheme.onPrimaryContainer.toArgb()
+            window.navigationBarColor = colorScheme.onPrimaryContainer.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

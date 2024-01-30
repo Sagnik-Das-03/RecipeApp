@@ -97,15 +97,15 @@ fun FilterAreaScreen(navigator: DestinationsNavigator, viewModel: MainViewModel 
                 )
             }
         } else {
-           LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Fixed(count = 1),
+           LazyHorizontalStaggeredGrid(rows = StaggeredGridCells.Fixed(count = 2),
                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
-               modifier = Modifier.padding(top = 120.dp, bottom = 120.dp)
+               modifier = Modifier.padding(top = 120.dp)
            ){
                items(
                    items = filteredMeals
                ){ filteredMeal->
                    WithAnimation(animation = slideInHorizontally()+ fadeIn(), delay = 250) {
-                       FilterItem(navigator = navigator, filteredMeal = filteredMeal)
+                       FilterItem(filteredMeal = filteredMeal)
                    }
                }
            }

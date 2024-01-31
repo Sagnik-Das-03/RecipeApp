@@ -51,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.MainViewModel
@@ -75,8 +76,8 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
         ),
         modifier = Modifier
             .padding(vertical = 8.dp, horizontal = 8.dp)
-            .heightIn(min= (0.35 * height).dp, max= (0.5 * height).dp)
-            .widthIn(min = (width * 0.65).dp, max = (width*0.75).dp)
+            .heightIn(min = (0.35 * height).dp, max = (0.5 * height).dp)
+            .widthIn(min = (width * 0.65).dp, max = (width * 0.75).dp)
             .background(
                 color = MaterialTheme.colorScheme.onSecondary.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(16.dp)
@@ -107,7 +108,9 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
                         containerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
                         contentColor = MaterialTheme.colorScheme.secondaryContainer
                     ),
-                    modifier = Modifier.scale(0.9f).width(width = (width*0.5).dp),
+                    modifier = Modifier
+                        .scale(0.9f)
+                        .width(width = (width * 0.5).dp),
                     onClick = { isSheetOpen = true }) {
                     Text(text = "Open Recipe")
                     Spacer(modifier = Modifier.height(10.dp))
@@ -143,17 +146,20 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
                                         horizontalArrangement = Arrangement.Start,
-                                        modifier = Modifier.padding(horizontal = 32.dp)
+                                        modifier = Modifier.padding(horizontal = 16.dp)
                                     ) {
                                         Text(
                                             color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f),
-                                            text = "Recipe: ${selectedMeal.strMeal}",
+                                            text = selectedMeal.strMeal,
                                             textAlign = TextAlign.Center,
+                                            maxLines = 1,
+                                            overflow = TextOverflow.Ellipsis,
                                             style = MaterialTheme.typography.headlineSmall.copy(fontStyle = FontStyle.Italic),
                                             fontWeight = FontWeight.ExtraBold,
-                                            modifier = Modifier
+                                            modifier = Modifier.weight(0.8f)
                                                 .padding(vertical = 8.dp, horizontal = 16.dp))
-                                        IconButton(onClick = {
+                                        IconButton(modifier = Modifier.weight(0.2f),
+                                            onClick = {
                                             Toast.makeText(
                                                 context,
                                                 "Recipe Added to Bookmarks",

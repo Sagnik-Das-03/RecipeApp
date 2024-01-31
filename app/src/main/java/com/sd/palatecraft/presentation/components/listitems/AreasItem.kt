@@ -21,10 +21,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.data.remote.dto.Area
+import com.sd.palatecraft.presentation.destinations.AreaDetailsScreenDestination
 
 @Composable
-fun AreasItem(area: Area) {
+fun AreasItem(area: Area, navigator: DestinationsNavigator) {
     Card(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -54,7 +56,7 @@ fun AreasItem(area: Area) {
                 modifier = Modifier
                     .padding(8.dp)
                     .weight(0.4f),
-                onClick = { /*TODO*/ }) {
+                onClick = { navigator.navigate(AreaDetailsScreenDestination(areaName = area.strArea)) }) {
                 Icon(
                     imageVector = Icons.Outlined.ArrowForward,
                     contentDescription = "Go to Cuisine",

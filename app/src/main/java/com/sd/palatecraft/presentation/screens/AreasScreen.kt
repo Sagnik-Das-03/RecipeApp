@@ -143,7 +143,7 @@ fun AreasScreen(navigator: DestinationsNavigator, viewModel: MainViewModel = get
                         items = areas
                     ) { area ->
 
-                        AreasItem(area = area)
+                        AreasItem(area = area, navigator= navigator)
                     }
                 }
             }

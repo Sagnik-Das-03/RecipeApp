@@ -229,7 +229,7 @@ fun NavigationDrawer(navigator: DestinationsNavigator, recipes: List<Meal>) {
                 )
             }
         ) {
-            WithAnimation(animation = fadeIn()+ slideInVertically(), delay = 50) {
+            WithAnimation(animation = fadeIn()+ slideInVertically(), delay = 0) {
                 LazyColumn{
                     items(recipes) { recipe ->
                         RecipeItem(recipe)

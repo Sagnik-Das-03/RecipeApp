@@ -36,22 +36,21 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.presentation.components.listitems.FilterItem
-import com.sd.palatecraft.presentation.destinations.CategoriesScreenDestination
 import com.sd.palatecraft.presentation.destinations.IngredientsScreenDestination
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Destination
 @Composable
-fun IngredientDetailsScreen(
-    navigator: DestinationsNavigator, ingredientName: String, viewModel: MainViewModel = getViewModel()
+fun AreaDetailsScreen(
+    navigator: DestinationsNavigator, areaName: String, viewModel: MainViewModel = getViewModel(),
 ) {
     val filteredMeals by viewModel.filteredMeals.collectAsState(emptyList())
     val isLoading by viewModel.isLoading.collectAsState(true)
     val isError by viewModel.isError.collectAsState(false)
     val message by viewModel.message.collectAsState("")
     LaunchedEffect(Unit) {
-        viewModel.searchByIngredient(ingredient = ingredientName)
+        viewModel.searchByArea(area = areaName)
     }
     if (isLoading) {
         Box(
@@ -62,7 +61,7 @@ fun IngredientDetailsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Loading Ingredient",
+                    text = "Loading Area",
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -101,7 +100,7 @@ fun IngredientDetailsScreen(
                 }
                 Spacer(modifier = Modifier.width(18.dp))
                 Text(
-                    text = "Ingredient ($ingredientName)",
+                    text = "Area ($areaName)",
                     color = MaterialTheme.colorScheme.secondary,
                     fontFamily = FontFamily.Cursive,
                     overflow = TextOverflow.Ellipsis,

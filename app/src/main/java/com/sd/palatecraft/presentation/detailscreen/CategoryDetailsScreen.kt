@@ -52,7 +52,7 @@ fun CategoryDetailsScreen(
     val isError by viewModel.isError.collectAsState(false)
     val message by viewModel.message.collectAsState("")
     LaunchedEffect(Unit) {
-        viewModel.searchByCategory(category)
+        viewModel.searchByCategory(category = category)
     }
     if(isLoading){
         Box(

@@ -53,7 +53,17 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+<p float="middle">
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(1).jpg' title='input 1' width='200' alt='input 1' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(2).jpg' title='input 2' width='200' alt='input 2' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(3).jpg' title='input 3' width='200' alt='input 3' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(4).jpg' title='input 4' width='200' alt='input 4' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(5).jpg' title='input 5' width='200' alt='input 5' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(6).jpg' title='input 6' width='200' alt='input 6' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(7).jpg' title='input 7' width='200' alt='input 7' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(8).jpg' title='input 7' width='200' alt='input 7' />
+ </p>
+
 
 
 ## Installation

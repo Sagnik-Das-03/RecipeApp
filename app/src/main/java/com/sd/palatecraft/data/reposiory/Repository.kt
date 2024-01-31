@@ -1,6 +1,6 @@
 package com.sd.palatecraft.data.reposiory
 
-import com.sd.palatecraft.data.local.MealEntitiy
+import com.sd.palatecraft.data.local.MealEntity
 import com.sd.palatecraft.data.remote.dto.FilterByArea
 import com.sd.palatecraft.data.remote.dto.FilterByCategory
 import com.sd.palatecraft.data.remote.dto.FilterByIngredient
@@ -35,9 +35,9 @@ interface Repository {
 
     suspend fun filterByMainIngredient(ingredient: String): Response<FilterByIngredient>
 
-    suspend fun getMeals(): Flow<List<MealEntitiy>>
+    suspend fun getMeals(): Flow<List<MealEntity>>
 
-    suspend fun addMeals(meal:MealEntitiy)
+    suspend fun addMeals(meal:MealEntity)
 
-    suspend fun deleteMeals(meal: MealEntitiy)
+    suspend fun deleteMeals(meal: MealEntity)
 }

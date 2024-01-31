@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sd.palatecraft.data.local.MealEntitiy
+import com.sd.palatecraft.data.local.MealEntity
 import com.sd.palatecraft.data.remote.dto.Area
 import com.sd.palatecraft.data.remote.dto.Category
 import com.sd.palatecraft.data.remote.dto.FilteredMeals
@@ -57,7 +57,7 @@ class MainViewModel(
     private val _currentQuery = MutableStateFlow("")
     val currentQuery: StateFlow<String> = _currentQuery.asStateFlow()
 
-    private val _meals:MutableStateFlow<List<MealEntitiy>> = MutableStateFlow(emptyList())
+    private val _meals:MutableStateFlow<List<MealEntity>> = MutableStateFlow(emptyList())
     val meals = _meals.asStateFlow()
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -72,7 +72,7 @@ class MainViewModel(
     @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchRandomRecipes() {
         viewModelScope.launch {
-            delay(2500L)
+            delay(1000L)
             if(!isDataLoaded){
                 try {
                     val response = repository.getRandomRecipe()
@@ -531,12 +531,12 @@ class MainViewModel(
         }
     }
 
-    fun addMeal(meal: MealEntitiy){
+    fun addMeal(meal: MealEntity){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addMeals(meal)
         }
     }
-    fun deleteMeal(meal: MealEntitiy){
+    fun deleteMeal(meal: MealEntity){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteMeals(meal)
         }

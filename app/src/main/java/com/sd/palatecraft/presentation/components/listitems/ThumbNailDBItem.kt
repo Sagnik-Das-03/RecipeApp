@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.twotone.Add
 import androidx.compose.material.icons.twotone.Delete
 import androidx.compose.material3.ButtonDefaults
@@ -52,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.MainViewModel
-import com.sd.palatecraft.data.local.MealEntitiy
+import com.sd.palatecraft.data.local.MealEntity
 import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
@@ -61,7 +60,7 @@ import org.koin.androidx.compose.getViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ThumbNailDBItem(recipe: MealEntitiy, isError: Boolean, viewModel: MainViewModel = getViewModel()) {
+fun ThumbNailDBItem(recipe: MealEntity, isError: Boolean, viewModel: MainViewModel = getViewModel()) {
     var isSheetOpen by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
     val width = LocalConfiguration.current.screenWidthDp

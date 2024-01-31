@@ -32,7 +32,7 @@ class App: Application() {
                 }
                 single {
                     Room
-                        .databaseBuilder( this@App, MealDatabase::class.java, "todo.db")
+                        .databaseBuilder( this@App, MealDatabase::class.java, "recipe.db")
                         .build()
                 }
                 single<Repository> {

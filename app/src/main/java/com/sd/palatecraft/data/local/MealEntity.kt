@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.sd.palatecraft.data.remote.dto.Meal
 
 @Entity(tableName = "meal")
-data class MealEntitiy(
+data class MealEntity(
     val dateModified: String = "",
     @PrimaryKey
     val idMeal: String = "",

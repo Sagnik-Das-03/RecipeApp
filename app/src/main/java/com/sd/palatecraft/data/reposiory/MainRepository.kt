@@ -1,7 +1,7 @@
 package com.sd.palatecraft.data.reposiory
 
 import com.sd.palatecraft.data.local.MealDatabase
-import com.sd.palatecraft.data.local.MealEntitiy
+import com.sd.palatecraft.data.local.MealEntity
 import com.sd.palatecraft.data.remote.dto.FilterByArea
 import com.sd.palatecraft.data.remote.dto.FilterByCategory
 import com.sd.palatecraft.data.remote.dto.ListMealByFirstLetter
@@ -61,10 +61,10 @@ class MainRepository(
         return api.filterByIngredient(ingredient = ingredient)
     }
 
-    override suspend fun getMeals(): Flow<List<MealEntitiy>> = dao.getTodos()
+    override suspend fun getMeals(): Flow<List<MealEntity>> = dao.getTodos()
 
-    override suspend fun addMeals(meal: MealEntitiy) = dao.addTodo(meal)
+    override suspend fun addMeals(meal: MealEntity) = dao.addTodo(meal)
 
-    override suspend fun deleteMeals(meal: MealEntitiy) = dao.deleteTodo(meal)
+    override suspend fun deleteMeals(meal: MealEntity) = dao.deleteTodo(meal)
 }
 

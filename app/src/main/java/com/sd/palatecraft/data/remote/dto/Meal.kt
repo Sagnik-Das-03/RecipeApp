@@ -1,6 +1,6 @@
 package com.sd.palatecraft.data.remote.dto
 
-import com.sd.palatecraft.data.local.MealEntitiy
+import com.sd.palatecraft.data.local.MealEntity
 private  val enc: String = ""
 data class Meal(
     val dateModified: String,
@@ -57,8 +57,8 @@ data class Meal(
     val strTags: String,
     val strYoutube: String
 ){
-    fun toMealEntity(): MealEntitiy{
-        return MealEntitiy(
+    fun toMealEntity(): MealEntity{
+        return MealEntity(
             dateModified = dateModified.plus(enc),
             idMeal = idMeal.plus(enc),
             strArea = strArea.plus(enc),

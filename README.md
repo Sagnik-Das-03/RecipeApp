@@ -5,10 +5,9 @@ A navtive android applcation that let's you search for a Recipe by its initial l
 
 
 ## Demo
+<img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif' title='demo' alt='input 1' />
 
-Insert gif or link to demo
-
-
+- [Full Video]()
 ## API Reference
 
 #### Documentation
@@ -74,7 +73,7 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
 
 - Set up Android Studio
 
-- Download the project zip file Click here to [Download Zip]()
+- Download the project zip file Click here to [Download Zip](https://github.com/Sagnik-Das-03/RecipeApp/archive/refs/heads/app.zip)
 
 - Extract it and open in android studio
 

@@ -101,7 +101,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                 .padding(PaddingValues(start = 40.dp, top = 20.dp, end = 40.dp, bottom = 20.dp))
         ){
             Text(text = "Recipe of the Day",
-                fontSize =45.sp,
+                fontSize =40.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = WhiteA90,
                 modifier = Modifier

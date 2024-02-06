@@ -5,8 +5,22 @@ A navtive android applcation that let's you search for a Recipe by its initial l
 
 
 ## Demo
+<img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif' title='demo' alt='input 1' />
 
-Insert gif or link to demo
+- [Full Video]()
+
+## Screenshots
+
+<p float="middle">
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(2).jpg' title='input 1' width='250' alt='input 1' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(1).jpg' title='input 2' width='250' alt='input 2' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(6).jpg' title='input 3' width='250' alt='input 3' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(7).jpg' title='input 4' width='250' alt='input 4' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(8).jpg' title='input 5' width='250' alt='input 5' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(3).jpg' title='input 6' width='250' alt='input 6' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(4).jpg' title='input 7' width='250' alt='input 7' />
+    <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/app%20(5).jpg' title='input 7' width='250' alt='input 7' />
+ </p>
 
 
 ## API Reference
@@ -48,12 +62,6 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
  - [Android Youtube Player](https://github.com/PierfrancescoSoffritti/android-youtube-player)
  - [Accompanist](https://github.com/google/accompanist)
  - [Coroutines](https://developer.android.com/kotlin/coroutines)
- 
-
-
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
 
 
 ## Installation
@@ -64,7 +72,7 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
 
 - Set up Android Studio
 
-- Download the project zip file Click here to [Download Zip]()
+- Download the project zip file Click here to [Download Zip](https://github.com/Sagnik-Das-03/RecipeApp/archive/refs/heads/app.zip)
 
 - Extract it and open in android studio
 

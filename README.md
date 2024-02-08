@@ -1,13 +1,13 @@
 
 # PalateCraft(Recipe App)
 
-A navtive android applcation that let's you search for a Recipe by its initial letter, name of dish, category, area or by ingredients and let's you store it offline for further use.
+A native android application that let's you search for a Recipe by its initial letter, name of dish, category, area or by ingredients and let's you store it offline for further use.
 
 
 ## Demo
 <img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif' title='demo' alt='input 1' />
 
-- [Full Video]()
+- [Full Video](https://youtu.be/yFjcq3KP9xM)
 
 ## Screenshots
 
@@ -80,7 +80,7 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
 
 ### Method 2:
 
--  Download the apk(Note: Apk might not be up to date) Click here to [Download Apk]()
+-  Download the apk(Note: Apk might not be up to date) Click here to [Download Apk](https://drive.google.com/file/d/15RE8Tf2vGc_S3Li8OgjHz83kEUi7b2Ab/view?usp=sharing)
 
 - Install the apk on your android device
 

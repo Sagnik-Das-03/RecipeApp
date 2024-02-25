@@ -111,6 +111,8 @@ dependencies {
     implementation ("io.insert-koin:koin-android:3.2.0-beta-1")
     //Youtube Player
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+    //Chrome Tab
+    implementation ("androidx.browser:browser:1.5.0")
 
     // Room
     implementation("androidx.room:room-runtime:2.5.2")

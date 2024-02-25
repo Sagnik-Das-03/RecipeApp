@@ -21,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Add
+import androidx.compose.material.icons.twotone.Share
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -58,6 +59,7 @@ import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
 import com.sd.palatecraft.data.remote.dto.Meal
+import com.sd.palatecraft.util.RecipeUtils
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -86,12 +88,34 @@ fun ThumbNailItem(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                 .padding(PaddingValues(start = 15.dp, end = 10.dp, top = 20.dp, bottom = 20.dp))
         ) {
             Spacer(modifier = Modifier.size(30.dp))
-            AsyncImage(
-                model = recipe.strMealThumb, contentDescription = "RecipeImg",
-                modifier = Modifier
-                    .size((width * 0.5).dp)
-                    .clip(RoundedCornerShape(20.dp))
-            )
+            Row {
+                AsyncImage(
+                    model = recipe.strMealThumb, contentDescription = "RecipeImg",
+                    modifier = Modifier
+                        .size((width * 0.5).dp)
+                        .clip(RoundedCornerShape(20.dp))
+                )
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if(!recipe.strSource.isNullOrEmpty()){
+                        IconButton(onClick = { RecipeUtils.shareRecipe(context = context, recipeUrl = recipe.strSource) }) {
+                            Icon(
+                                imageVector = Icons.TwoTone.Share,
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.secondary)
+                        }
+                        IconButton(onClick = { RecipeUtils.openInChromeCustomTabs(context = context, url = recipe.strSource) }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.chrome),
+                                contentDescription = null,
+                                modifier = Modifier.size(24.dp),
+                                tint = MaterialTheme.colorScheme.secondary)
+                        }
+                    }
+                }
+            }
             Spacer(modifier = Modifier.size(10.dp))
             Text(
                 text = recipe.strMeal,

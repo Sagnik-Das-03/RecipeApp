@@ -22,10 +22,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.twotone.Share
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -48,11 +50,13 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.sd.palatecraft.MainViewModel
 import com.sd.palatecraft.R
@@ -60,6 +64,7 @@ import com.sd.palatecraft.data.remote.dto.FilteredMeals
 import com.sd.palatecraft.presentation.components.IngredientsList
 import com.sd.palatecraft.presentation.components.Instructions
 import com.sd.palatecraft.presentation.components.videoplayer.YoutubePlayer
+import com.sd.palatecraft.util.RecipeUtils
 import org.koin.androidx.compose.getViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -86,7 +91,7 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
         Column(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 32.dp, bottom = 16.dp, start = 16.dp, end = 20.dp)
+            modifier = Modifier.padding(top = 48.dp, bottom = 16.dp, start = 28.dp, end = 20.dp)
         ) {
             AsyncImage(
                 model = filteredMeal.strMealThumb,
@@ -99,28 +104,26 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.ExtraBold),
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                FilledTonalButton(
-                    colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
-                        contentColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    modifier = Modifier
-                        .scale(0.9f)
-                        .width(width = (width * 0.5).dp),
-                    onClick = { isSheetOpen = true }) {
-                    Text(text = "Open Recipe")
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Icon(
-                        imageVector = Icons.Outlined.Add,
-                        contentDescription = "Go to",
-                        modifier = Modifier.size(18.dp))
-                }
+            FilledTonalButton(
+                colors = ButtonDefaults.filledTonalButtonColors(
+                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.75f),
+                    contentColor = MaterialTheme.colorScheme.secondaryContainer
+                ),
+                modifier = Modifier
+                    .scale(0.9f)
+                    .width(width = (width * 0.5).dp),
+                onClick = { isSheetOpen = true }) {
+                Text(text = "Open Recipe")
+                Spacer(modifier = Modifier.height(10.dp))
+                Icon(
+                    imageVector = Icons.Outlined.Add,
+                    contentDescription = "Go to",
+                    modifier = Modifier.size(18.dp))
                 if(isSheetOpen){
-                    ModalBottomSheet(onDismissRequest = { isSheetOpen = false }) {
+                    ModalBottomSheet(
+                        onDismissRequest = { isSheetOpen = false },
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    ) {
                         val lifecycleOwner = LocalLifecycleOwner.current
                         val meals by viewModel.recipes.collectAsState(emptyList())
                         val isLoading by viewModel.isLoading.collectAsState(true)
@@ -169,8 +172,32 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
                                         }) {
                                             Icon(painter = painterResource(id = R.drawable.bookmark_solid),
                                                 contentDescription = "Add to Bookmark",
-                                                modifier = Modifier.size(18.dp),
+                                                modifier = Modifier.size(24.dp),
                                                 tint = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
+                                        }
+                                        if(!selectedMeal.strSource.isNullOrEmpty()){
+                                            IconButton(
+                                                onClick = {
+                                                    RecipeUtils.openInChromeCustomTabs(context= context, url= selectedMeal.strSource)
+                                                }
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(id = R.drawable.chrome),
+                                                    contentDescription = "Play on Youtube",
+                                                    modifier = Modifier.size(24.dp),
+                                                    tint = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
+                                            }
+                                            IconButton(
+                                                onClick = {
+                                                    RecipeUtils.shareRecipe(context = context, recipeUrl = selectedMeal.strSource)
+                                                }
+                                            ) {
+                                                Icon(
+                                                    imageVector= Icons.TwoTone.Share,
+                                                    contentDescription = "Save",
+                                                    modifier = Modifier.size(24.dp),
+                                                    tint = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f))
+                                            }
                                         }
                                     }
                                     Row(horizontalArrangement = Arrangement.Center,
@@ -189,6 +216,7 @@ fun FilterItem(filteredMeal: FilteredMeals, viewModel:MainViewModel = getViewMod
                                     YoutubePlayer(
                                         youtubeVideoId = selectedMeal.strYoutube.substringAfter("="),
                                         lifecycleOwner = lifecycleOwner)
+                                    Spacer(modifier = Modifier.height(8.dp))
                                     Instructions(recipe = selectedMeal)
                                     IngredientsList(recipe = selectedMeal)
                                 }

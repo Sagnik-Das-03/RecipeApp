@@ -23,12 +23,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.PlayArrow
+import androidx.compose.material.icons.twotone.Share
 import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -66,6 +68,7 @@ import com.sd.palatecraft.data.remote.dto.Meal
 import com.sd.palatecraft.ui.theme.Black40
 import com.sd.palatecraft.ui.theme.BlackA60
 import com.sd.palatecraft.ui.theme.WhiteA90
+import com.sd.palatecraft.util.RecipeUtils
 import com.sd.palatecraft.util.backgrounds
 import org.koin.androidx.compose.getViewModel
 
@@ -81,7 +84,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
     val lifecycleOwner = LocalLifecycleOwner.current
     Box(
         modifier = Modifier
-            .heightIn(min = (0.5 * height).dp, max = (height*1.1).dp)
+            .heightIn(min = (0.5 * height).dp, max = (height * 1.1).dp)
             .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
             .paint(
                 painter = painterResource(id = background),
@@ -149,7 +152,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                     onClick = { isSheetOpen = true },
                     colors = ButtonDefaults.filledTonalButtonColors(Color.Red)
                 ) {
-                    Text(text = "Video",
+                    Text(text = "Youtube",
                         fontStyle = FontStyle.Italic,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 15.sp,
@@ -168,22 +171,66 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                         Toast.makeText(context, "Recipe Saved", Toast.LENGTH_SHORT).show()
                     },
                     colors = ButtonDefaults.filledTonalButtonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.onSecondary
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 ) {
                     Text(text = "Bookmark",
                         fontStyle = FontStyle.Italic,
                         fontWeight = FontWeight.ExtraBold,
                         fontSize = 15.sp,
-                        fontFamily = FontFamily.SansSerif,
-                        color = WhiteA90)
+                        fontFamily = FontFamily.SansSerif)
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
                         painter = painterResource(id = R.drawable.bookmark_solid),
                         contentDescription = "Save",
-                        tint = WhiteA90,
                         modifier = Modifier.size(18.dp))
+                }
+            }
+            if (!recipe.strSource.isNullOrBlank()){
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    ElevatedButton(
+                        onClick = {
+                            RecipeUtils.openInChromeCustomTabs(context= context, url= recipe.strSource)
+                        },
+                        colors = ButtonDefaults.filledTonalButtonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+                        )
+                    ) {
+                        Text(text = "Chrome",
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily.SansSerif)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            painter = painterResource(id = R.drawable.chrome),
+                            contentDescription = "Play on Youtube",
+                            modifier = Modifier.size(18.dp))
+                    }
+                    ElevatedButton(
+                        onClick = {
+                            RecipeUtils.shareRecipe(context = context, recipeUrl = recipe.strSource)
+                        },
+                        colors = ButtonDefaults.filledTonalButtonColors(
+                            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+                        )
+                    ) {
+                        Text(text = "Share",
+                            fontStyle = FontStyle.Italic,
+                            fontWeight = FontWeight.ExtraBold,
+                            fontSize = 15.sp,
+                            fontFamily = FontFamily.SansSerif)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Icon(
+                            imageVector= Icons.TwoTone.Share,
+                            contentDescription = "Save",
+                            modifier = Modifier.size(18.dp))
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
@@ -226,6 +273,7 @@ fun ThumbNail(recipe: Meal, viewModel: MainViewModel = getViewModel()) {
                                 modifier = Modifier.padding(start = 16.dp, end = 16.dp))
                             Spacer(modifier = Modifier.height(8.dp))
                             YoutubePlayer(youtubeVideoId = recipe.strYoutube.substringAfter("="), lifecycleOwner = lifecycleOwner)
+                            Spacer(modifier = Modifier.height(8.dp))
                         }
                     }
                 }

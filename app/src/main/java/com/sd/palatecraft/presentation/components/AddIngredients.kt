@@ -46,12 +46,11 @@ fun IngredientsList(ingredient: Any, measure: Any){
         val url = "https://www.themealdb.com/images/ingredients/${ingredient}.png"
         AsyncImage(model = url, contentDescription = "Ingredient Image", alignment = Alignment.Center,
             modifier = Modifier
-            .size(50.dp)
             .padding(10.dp)
-            .weight(0.33f))
+            .weight(0.34f))
         Spacer(modifier = Modifier.width(8.dp)) // Adjust the spacing as needed
         Text(
-            text = ingredient.toString().capitalize(locale = Locale.ENGLISH),
+            text = ingredient.toString(),
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.SemiBold,

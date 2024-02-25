@@ -43,6 +43,8 @@ A native android application that let's you search for a Recipe by its initial l
 - Material3 Theme
 - Search by Initial Letter, Name, Category, Area or Main Ingredient
 - Embedded Youtube Player to play recipe videos
+- Used Shared Preferences to persistently save scroll position
+- Supported recipes can be shared and opened in browser for further details
 
 
 ## Tech Stack

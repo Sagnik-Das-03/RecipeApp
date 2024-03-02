@@ -5,7 +5,7 @@ A native android application that let's you search for a Recipe by its initial l
 
 
 ## Demo
-<img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif' title='demo' alt='input 1' />
+[![Video](https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif)](https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif)
 
 ## Video
 [![Video](https://img.youtube.com/vi/yFjcq3KP9xM/maxresdefault.jpg)](https://www.youtube.com/watch?v=yFjcq3KP9xM)

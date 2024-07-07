@@ -83,7 +83,7 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
 
 ### Method 2:
 
--  Download the apk(Note: Apk might not be up to date) Click here to [Download Apk](https://drive.google.com/file/d/15RE8Tf2vGc_S3Li8OgjHz83kEUi7b2Ab/view?usp=sharing)
+-  Download the apk(Note: Apk might not be up to date) Click here to [Download Apk](https://drive.google.com/file/d/1wwz5u8H_RXOuNoYfU8CsevR2vbybApL6/view?usp=sharing)
 
 - Install the apk on your android device
 

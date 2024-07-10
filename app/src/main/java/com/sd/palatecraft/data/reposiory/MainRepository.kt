@@ -61,10 +61,10 @@ class MainRepository(
         return api.filterByIngredient(ingredient = ingredient)
     }
 
-    override suspend fun getMeals(): Flow<List<MealEntity>> = dao.getTodos()
+    override suspend fun getMeals(): Flow<List<MealEntity>> = dao.getRecipes()
 
-    override suspend fun addMeals(meal: MealEntity) = dao.addTodo(meal)
+    override suspend fun addMeals(meal: MealEntity) = dao.addRecipe(meal)
 
-    override suspend fun deleteMeals(meal: MealEntity) = dao.deleteTodo(meal)
+    override suspend fun deleteMeals(meal: MealEntity) = dao.deleteRecipe(meal)
 }
 

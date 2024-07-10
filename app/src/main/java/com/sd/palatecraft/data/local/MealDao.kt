@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MealDao {
     @Upsert
-    fun addTodo(meal: MealEntity)
+    fun addRecipe(meal: MealEntity)
 
     @Query("SELECT * FROM `meal`")
-    fun getTodos(): Flow<List<MealEntity>>
+    fun getRecipes(): Flow<List<MealEntity>>
 
     @Update
-    fun updateTodo(todo:MealEntity)
+    fun updateRecipe(todo:MealEntity)
 
     @Delete
-    fun deleteTodo(todo:MealEntity)
+    fun deleteRecipe(todo:MealEntity)
 }

@@ -5,9 +5,10 @@ A native android application that let's you search for a Recipe by its initial l
 
 
 ## Demo
-<img src='https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif' title='demo' alt='input 1' />
+[![Video](https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif)](https://github.com/Sagnik-Das-03/RecipeApp/blob/app/ReadmeAsssets/recipeapp.gif)
 
-- [Full Video](https://youtu.be/yFjcq3KP9xM)
+## Video
+[![Video](https://img.youtube.com/vi/yFjcq3KP9xM/maxresdefault.jpg)](https://www.youtube.com/watch?v=yFjcq3KP9xM)
 
 ## Screenshots
 
@@ -43,6 +44,8 @@ A native android application that let's you search for a Recipe by its initial l
 - Material3 Theme
 - Search by Initial Letter, Name, Category, Area or Main Ingredient
 - Embedded Youtube Player to play recipe videos
+- Used Shared Preferences to persistently save scroll position
+- Supported recipes can be shared and opened in browser for further details
 
 
 ## Tech Stack
@@ -80,7 +83,7 @@ Koin (*Dependency Injection*), Compose Nav Destinations (*Navigation*), Coil (*I
 
 ### Method 2:
 
--  Download the apk(Note: Apk might not be up to date) Click here to [Download Apk](https://drive.google.com/file/d/15RE8Tf2vGc_S3Li8OgjHz83kEUi7b2Ab/view?usp=sharing)
+-  Download the apk(Note: Apk might not be up to date) Click here to [Download Apk](https://drive.google.com/file/d/1wwz5u8H_RXOuNoYfU8CsevR2vbybApL6/view?usp=sharing)
 
 - Install the apk on your android device
 
